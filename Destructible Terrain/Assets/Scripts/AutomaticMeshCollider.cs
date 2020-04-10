@@ -6,6 +6,7 @@ using UnityEditor;
 public class AutomaticMeshCollider : MonoBehaviour
 {
     List<Rect> rects;
+    List<BoxCollider2D> colliders;
     public int ppu=1;
     // Start is called before the first frame update
     void Start()
@@ -18,11 +19,14 @@ public class AutomaticMeshCollider : MonoBehaviour
     {
         
     }
-
+    
     public void MakeCollider(List<RLEColumn> world, int x, int y, int sizeX, int sizeY)
     {
         float time1 = Time.realtimeSinceStartup;
+        if(rects!=null)rects.Clear();
+        if(rects!=null)colliders.Clear();
         rects = new List<Rect>();
+        colliders = new List<BoxCollider2D>();
         PrepareMesh(world, x, y, sizeX, sizeY);
         
 
@@ -31,7 +35,7 @@ public class AutomaticMeshCollider : MonoBehaviour
            BoxCollider2D b = gameObject.AddComponent<BoxCollider2D>();
            b.offset = new Vector2(-(float)sizeX/ppu/2 + r.x + r.size.x/2, -(float)sizeY/ppu/2 + r.y + r.size.y/2);
            b.size = r.size;
-           
+           colliders.Add(b);
         }
 
         float time2 = Time.realtimeSinceStartup;
@@ -74,6 +78,7 @@ public class AutomaticMeshCollider : MonoBehaviour
 
         return;
     }
+    
 
     public void OnGUI()
     {

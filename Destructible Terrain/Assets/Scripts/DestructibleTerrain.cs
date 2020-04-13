@@ -158,6 +158,7 @@ public class DestructibleTerrain : MonoBehaviour
         */
 
         UpdateWorld();
+        UpdateTexture();
         
     }
 
@@ -281,10 +282,10 @@ public class DestructibleTerrain : MonoBehaviour
                 for(int i=r.min; i<r.max;i++)
                 {
                     
-                    if(c.x>0)
+                    if(c.x>1)
                         if(!columns[c.x-1].isWithin(i)) outlineTexture.SetPixel(c.x-1, i, Color.black);
 
-                    if(c.x<columns.Count)
+                    if(c.x<columns.Count-1)
                         if(!columns[c.x+1].isWithin(i)) outlineTexture.SetPixel(c.x+1, i, Color.black);
                         
                 }

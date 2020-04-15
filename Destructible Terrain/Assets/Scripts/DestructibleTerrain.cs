@@ -264,7 +264,7 @@ public class DestructibleTerrain : MonoBehaviour
 
     void UpdateOutline()
     {
-        //Create new texture and make it transparent
+        //Create new texture and make it transparent.
         outlineTexture = new Texture2D(loadedTexture.width,loadedTexture.height);
         outlineTexture.filterMode = FilterMode.Point;
         Color[] clrs = new Color[(loadedTexture.width*loadedTexture.height)];

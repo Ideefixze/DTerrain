@@ -21,7 +21,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 3}
-  m_MinSize: {x: 950, y: 300}
+  m_MinSize: {x: 950, y: 544}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -134,10 +134,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
-  m_MinSize: {x: 679, y: 344}
-  m_MaxSize: {x: 12004, y: 8044}
+  m_MinSize: {x: 679, y: 494}
+  m_MaxSize: {x: 14002, y: 14044}
   vertical: 0
-  controlID: 54
+  controlID: 114
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -159,8 +159,8 @@ MonoBehaviour:
     y: 0
     width: 1365
     height: 947
-  m_MinSize: {x: 404, y: 344}
-  m_MaxSize: {x: 8004, y: 8044}
+  m_MinSize: {x: 404, y: 494}
+  m_MaxSize: {x: 10002, y: 14044}
   vertical: 1
   controlID: 55
 --- !u!114 &8
@@ -264,14 +264,14 @@ MonoBehaviour:
     y: 670
     width: 1365
     height: 277
-  m_MinSize: {x: 100, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
-  m_ActualView: {fileID: 21}
+  m_MinSize: {x: 232, y: 272}
+  m_MaxSize: {x: 10002, y: 10022}
+  m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 20}
   - {fileID: 21}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -358,18 +358,18 @@ MonoBehaviour:
       y: 17
       width: 874
       height: 634
-    m_Scale: {x: 1, y: 1}
-    m_Translation: {x: 437, y: 317}
+    m_Scale: {x: 3, y: 3}
+    m_Translation: {x: 437, y: 316.99985}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -437
-      y: -317
-      width: 874
-      height: 634
+      x: -145.66667
+      y: -105.66662
+      width: 291.33334
+      height: 211.33333
     m_MinimalGUI: 1
   m_defaultScale: 0.8255208
   m_TargetTexture: {fileID: 0}
@@ -408,23 +408,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: a2310000
-      m_LastClickedID: 12706
-      m_ExpandedIDs: 72fbffff
+      m_SelectedIDs: b0420000
+      m_LastClickedID: 17072
+      m_ExpandedIDs: fc54feff2a55feffc855feff48f6feff5efbffffb0420000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: Terrain
-        m_OriginalName: Terrain
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 12706
+        m_UserData: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 9}
       m_SearchString: 
@@ -470,9 +470,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 0, y: 0, z: 0}
+    m_Target: {x: 0, y: 1.19, z: -10}
     speed: 2
-    m_Value: {x: 0, y: 0, z: 0}
+    m_Value: {x: 0, y: 1.19, z: -10}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -505,9 +505,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 74.6712
+    m_Target: 22
     speed: 2
-    m_Value: 74.6712
+    m_Value: 22
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -560,7 +560,7 @@ MonoBehaviour:
     height: 651
   m_ViewDataDictionary: {fileID: 0}
   m_VertSplit:
-    ID: 74
+    ID: 10304
     splitterInitialOffset: 0
     currentActiveSplitter: -1
     realSizes: 3d0100003e010000
@@ -583,9 +583,9 @@ MonoBehaviour:
     m_CpuProfilerOptions: 1
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 1a010000
-      m_LastClickedID: 282
-      m_ExpandedIDs: 02000000120000004100000072000000cf000000d1000000
+      m_SelectedIDs: e6000000
+      m_LastClickedID: 230
+      m_ExpandedIDs: 02000000120000004100000072000000cf000000d1000000d3000000d5000000d7000000db000000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -981,10 +981,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 405
+    x: 489
     y: 73
-    width: 958
-    height: 652
+    width: 874
+    height: 651
   m_ViewDataDictionary: {fileID: 0}
 --- !u!114 &19
 MonoBehaviour:
@@ -1014,7 +1014,7 @@ MonoBehaviour:
   m_ViewDataDictionary: {fileID: 0}
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 12710
+  m_LastSelectedObjectID: 17072
 --- !u!114 &20
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1054,20 +1054,20 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Graphics
+    - Assets/Graphics/world
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Graphics
+  - Assets/Graphics/world
   m_LastFoldersGridSize: 16
   m_LastProjectPath: D:\DTerrain\Destructible Terrain
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 8c300000
-    m_LastClickedID: 12428
-    m_ExpandedIDs: 000000003e2d000000ca9a3b
+    m_SelectedIDs: a8330000
+    m_LastClickedID: 13224
+    m_ExpandedIDs: 000000004e2d0000a030000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1095,7 +1095,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000003e2d0000
+    m_ExpandedIDs: 000000004e2d0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1120,24 +1120,24 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: a2310000
-    m_LastClickedInstanceID: 12706
-    m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c6230000e44ffeff462500007214fdffe8e200001e270000ca4c0000262efaffe4610000d4700000f62a000070970000e02e0000da2e0000f62f00003e2f0000582b000032300000422f0000365501008c630000a636000000000000
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
+    m_HadKeyboardFocusLastEvent: 0
+    m_ExpandedInstanceIDs: c6230000e44ffeff462500007214fdffe8e200001e270000ca4c0000262efaffe4610000d4700000f62a000070970000e02e0000da2e0000f62f00003e2f0000582b000032300000422f0000365501008c630000a63600000000000026340000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: DestructibleTerrain
-      m_OriginalName: DestructibleTerrain
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 10924
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 11}
     m_CreateAssetUtility:

@@ -1,0 +1,12 @@
+{
+    "name": "Unity.2D.PixelPerfect.Editor",
+    "references": [
+        "Unity.2D.PixelPerfect"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}

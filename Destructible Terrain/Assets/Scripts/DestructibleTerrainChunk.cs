@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class DestructibleTerrainChunk : MonoBehaviour
 {
+    public bool updateTerrainOnNextFrame=false;
     List<RLEColumn> columns;
 
     Texture2D loadedTexture; //Original texture loaded from spriteRenderer.
@@ -11,7 +12,17 @@ public class DestructibleTerrainChunk : MonoBehaviour
     Texture2D finalTexture; //Final texture shown to the player.
     Sprite sprite; // Sprite used by SpriteRenderer.
 
+    
+
     // Start is called before the first frame update
+    public Texture2D GetTerrainTexture()
+    {
+        return terrainTexture;
+    }
+    public Texture2D GetOutlineTexture()
+    {
+        return outlineTexture;
+    }
     void Start()
     {
         columns = new List<RLEColumn>();
@@ -50,9 +61,13 @@ public class DestructibleTerrainChunk : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MouseDestruction();
-       // UpdateTexture();
-    }   
+        //MouseDestruction();
+        if(updateTerrainOnNextFrame)
+        {
+            UpdateTexture();
+            updateTerrainOnNextFrame=false;
+        }
+    }       
 
     //Returns true if it changed at least one pixel in texture
     public bool DestroyTerrain(int x, int y, float power)
@@ -72,13 +87,30 @@ public class DestructibleTerrainChunk : MonoBehaviour
     {
         if(x>=0 && x<terrainTexture.width && y>=0 && y<terrainTexture.height)
         {
-            if(terrainTexture.GetPixel(x,y).a<=0.2f && terrainTexture.GetPixel(x,y).a>=0.01f)
+           if(terrainTexture.GetPixel(x,y).a>=0.01f)
                 outlineTexture.SetPixel(x,y,outlineCol);
-            //outlineTexture.SetPixel(x-1,y,outlineCol);
-            //outlineTexture.SetPixel(x+1,y,outlineCol);
-            //outlineTexture.SetPixel(x,y+1,outlineCol);
-            //outlineTexture.SetPixel(x,y-1,outlineCol);
         }
+    }
+
+    public void DestroyTerrainWithShape(int x, int y, Shape s, float power)
+    {
+        int k = 0;
+        bool changed=false;
+        foreach(Range r in s.columns)
+        {
+            MakeOutline(x+k,y+r.min,Color.black);
+            for(int i = r.min+1; i<r.max-1;i++)
+            {
+                if(k>0 && k<s.columns.Count-1)
+                    changed = DestroyTerrain(x+k,y+i,power);
+                else
+                    MakeOutline(x+k,y+i,Color.black);
+
+            }
+            MakeOutline(x+k,y+r.max-1,Color.black);
+            k++;
+        }
+        //if(changed) UpdateTexture();
     }
 
     public void MouseDestruction()
@@ -92,28 +124,9 @@ public class DestructibleTerrainChunk : MonoBehaviour
             //Debug.Log(xPos+"      "+yPos);
 
             //bool changed = DestroyTerrain(xPos,yPos,1f);
-            
-            
-            int r = 3;
-            bool changed = false;
-            for(int i = xPos-r;i<=xPos+r;i++)
-            {
-                for(int j = yPos-r;j<=yPos+r;j++)
-                {
-                    if(i>=0 && i<terrainTexture.width && j>=0 && j<terrainTexture.height)
-                    {
-                        changed = DestroyTerrain(i,j,5f);
-                        if(i==xPos-r || i == xPos+r || j==yPos-r || j ==yPos+r)
-                            MakeOutline(i,j,Color.black); 
-                    }
-
-                    
-                    
-                } 
-
-            }
-            if(changed)
-                UpdateTexture();
+            int r = 4;
+            DestroyTerrainWithShape(xPos - r,yPos - r, Shape.GenerateShapeCircle(r),10f);
+            UpdateTexture();
         }
     }
 
@@ -121,7 +134,6 @@ public class DestructibleTerrainChunk : MonoBehaviour
     {
         terrainTexture.Apply();
         //UpdateOutline();
-
 
         Color[] clrs = new Color[(loadedTexture.width*loadedTexture.height)];
         Color[] oclrs = outlineTexture.GetPixels();

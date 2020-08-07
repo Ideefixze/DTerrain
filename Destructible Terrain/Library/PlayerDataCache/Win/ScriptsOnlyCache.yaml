@@ -2,7 +2,11 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - AutomaticMeshCollider
+    - CameraController
     - DestructibleTerrainChunk
+    - World
+    Unity.2D.PixelPerfect.dll:
+    - UnityEngine.U2D.PixelPerfectCamera
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
     - UnityEditor.Tilemaps.GridPaletteBrushes
@@ -32,6 +36,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
+    - Class: 50
+      Script: {instanceID: 0}
+    - Class: 58
+      Script: {instanceID: 0}
     - Class: 61
       Script: {instanceID: 0}
     - Class: 81
@@ -39,9 +47,15 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 10000}
+      Script: {instanceID: 10004}
     - Class: 114
-      Script: {instanceID: 10924}
+      Script: {instanceID: 10112}
+    - Class: 114
+      Script: {instanceID: 10444}
+    - Class: 114
+      Script: {instanceID: 10622}
+    - Class: 114
+      Script: {instanceID: 10942}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -167,7 +181,7 @@ ScriptsOnlyBuild:
     className: PhysicsRaycaster
   - hash:
       serializedVersion: 2
-      Hash: 51a22fea1cc42b8fcde5a62430cbcadf
+      Hash: 7b065c0ccdea4010985370c9b14a14d9
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: AutomaticMeshCollider
@@ -195,6 +209,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_SubMeshUI
+  - hash:
+      serializedVersion: 2
+      Hash: 63bdc2cf3273aa9bf650350f19d2af61
+    assemblyName: Unity.2D.PixelPerfect.dll
+    namespaceName: UnityEngine.U2D
+    className: PixelPerfectCamera
   - hash:
       serializedVersion: 2
       Hash: 5ab533713adae59372fb3e10a585c186
@@ -245,6 +265,12 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
+      Hash: 8f5e7d0478a235b7c5d2a5dc3e4e8261
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: CameraController
+  - hash:
+      serializedVersion: 2
       Hash: b3ab2106268377ffe25dd18ac23dca28
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -273,6 +299,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
     className: RemoteTestResultSender
+  - hash:
+      serializedVersion: 2
+      Hash: 1b5ef9cfe05bbd86eea79e21eec6d608
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: World
   - hash:
       serializedVersion: 2
       Hash: 4fd8bf02e3089425d3502e26c44ba31a
@@ -341,7 +373,7 @@ ScriptsOnlyBuild:
     className: Physics2DRaycaster
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: 3ab737873cafd3aac54ad3f7cf2816f4
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DestructibleTerrainChunk

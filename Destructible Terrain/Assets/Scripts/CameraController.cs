@@ -1,8 +1,8 @@
-﻿    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-    // ? 2017 TheFlyingKeyboard and released under MIT License
-    // theflyingkeyboard.net
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+// ? 2017 TheFlyingKeyboard and released under MIT License
+// theflyingkeyboard.net
     public class CameraController : MonoBehaviour {
         public float offset;
         public float speed;

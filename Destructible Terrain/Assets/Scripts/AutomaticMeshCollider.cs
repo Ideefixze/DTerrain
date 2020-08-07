@@ -1,86 +1,83 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class AutomaticMeshCollider : MonoBehaviour
+namespace DTerrain
 {
-    List<Rect> rects;
-    List<BoxCollider2D> colliders;
-    public int ppu=1;
-    // Start is called before the first frame update
-    void Start()
+    //Uses a Quadtree algorithm to generate a box colliders using List of RLEColumns of a given chunk.
+    //Also uses PPU and positions of chunk to make every collider fit pixels in our World.
+    public class AutomaticMeshCollider : MonoBehaviour
     {
-        
-    }
+        List<Rect> rects;
+        List<BoxCollider2D> colliders;
+        public float ppu = 1;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
-    public void MakeCollider(List<RLEColumn> world, int x, int y, int sizeX, int sizeY)
-    {
-        float time1 = Time.realtimeSinceStartup;
-        if(rects!=null)rects.Clear();
-        if(rects!=null)colliders.Clear();
-        rects = new List<Rect>();
-        colliders = new List<BoxCollider2D>();
-        PrepareMesh(world, x, y, sizeX, sizeY);
-        
-
-        foreach(Rect r in rects)
+        public void MakeColliders(List<Column> world, int x, int y, int sizeX, int sizeY)
         {
-           BoxCollider2D b = gameObject.AddComponent<BoxCollider2D>();
-           b.offset = new Vector2(-(float)sizeX/ppu/2 + r.x + r.size.x/2, -(float)sizeY/ppu/2 + r.y + r.size.y/2);
-           b.size = r.size;
-           colliders.Add(b);
-        }
+            ppu = GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
+            float time1 = Time.realtimeSinceStartup;
+            if (rects != null) rects.Clear();
 
-        float time2 = Time.realtimeSinceStartup;
-
-        Debug.Log("Created Collider in: "+(time2-time1));
-    }
-
-    public void PrepareMesh(List<RLEColumn> world, int x, int y, int sizeX, int sizeY)
-    {
-        bool hasAnyAir=false;
-        bool hasAnyGround=false;
-       // Debug.Log("Starting step: " + x.ToString() + ", "+ y.ToString() + "  :  "+sizeX.ToString()+"   "+sizeY.ToString());
-
-        for(int i = x; i<x+sizeX;i++)
-        {
-            for(int j = y; j<y+sizeY;j++)
+            foreach (Component b in gameObject.GetComponents<Component>())
             {
-                
-                if(world[i].isWithin(j))
-                    hasAnyGround=true;
-                else
-                    hasAnyAir=true;
-
-
-                if(hasAnyAir&&hasAnyGround)
+                if (b is BoxCollider2D)
                 {
-                    PrepareMesh(world,x,y,sizeX/2,sizeY/2);
-                    PrepareMesh(world,x+sizeX/2,y,sizeX/2,sizeY/2);
-                    PrepareMesh(world,x,y+sizeY/2,sizeX/2,sizeY/2);
-                    PrepareMesh(world,x+sizeX/2,y+sizeY/2,sizeX/2,sizeY/2);
-                    //Debug.Log("Return on check: "+rects.Count.ToString());
-                    return;
+                    Destroy(b);
                 }
             }
-            
+
+            rects = new List<Rect>();
+
+            PrepareMesh(world, x, y, sizeX, sizeY);
+
+
+            foreach (Rect r in rects)
+            {
+                BoxCollider2D b = gameObject.AddComponent<BoxCollider2D>();
+                b.offset = new Vector2(-sizeX / ppu / 2f + r.x + r.size.x / 2, -sizeY / ppu / 2f + r.y + r.size.y / 2f);
+                b.size = r.size;
+            }
+
+            float time2 = Time.realtimeSinceStartup;
+
+            //Debug.Log("Created Collider in: " + (time2 - time1));
         }
 
-        if(hasAnyGround&&!hasAnyAir)
-            rects.Add(new Rect((float)x/ppu,(float)y/ppu,(float)sizeX/ppu,(float)sizeY/ppu));
+        //Simple quadtree algortihm
+        public void PrepareMesh(List<Column> world, int x, int y, int sizeX, int sizeY)
+        {
+            bool hasAnyAir = false;
+            bool hasAnyGround = false;
+            
+            for (int i = x; i < x + sizeX; i++)
+            {
+                for (int j = y; j < y + sizeY; j++)
+                {
 
-        return;
-    }
-    
+                    if (world[i].isWithin(j))
+                        hasAnyGround = true;
+                    else
+                        hasAnyAir = true;
 
-    public void OnGUI()
-    {
+
+                    if (hasAnyAir && hasAnyGround)
+                    {
+                        PrepareMesh(world, x, y, sizeX / 2, sizeY / 2);
+                        PrepareMesh(world, x + sizeX / 2, y, sizeX / 2, sizeY / 2);
+                        PrepareMesh(world, x, y + sizeY / 2, sizeX / 2, sizeY / 2);
+                        PrepareMesh(world, x + sizeX / 2, y + sizeY / 2, sizeX / 2, sizeY / 2);
+                        return;
+                    }
+                }
+
+            }
+
+            if (hasAnyGround && !hasAnyAir)
+                rects.Add(new Rect(x / ppu, y / ppu, sizeX / ppu, sizeY / ppu));
+
+            return;
+        }
+
     }
 }

@@ -79,6 +79,8 @@ namespace DTerrain
             }
         }
 
+        //Deletes a single pixel/position from the column.
+        //Splits the range into two if needed.
         public void SingleDelRange(int pos)
         {
             Range r = Within(pos);
@@ -92,6 +94,8 @@ namespace DTerrain
             }
         }
 
+        //Deletes a range from collumn.
+        //May be buggy.
         public void DelRange(Range delr)
         {
             int a = delr.min;

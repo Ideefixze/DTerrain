@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace DTerrain
 {
+    /// <summary>
+    /// Shape is a simple class that holds a list of Ranges (not columns) and then is used to destroy terrain with.
+    /// To make complicated shape destructions (not squares, circles etc.) don't use it as it supports only list of ranges.
+    /// </summary>
     public class Shape
     {
         int _width;
@@ -21,6 +25,11 @@ namespace DTerrain
             columns = new List<Range>();
         }
 
+        /// <summary>
+        /// Generates a Shape: circle.
+        /// </summary>
+        /// <param name="r">Radius</param>
+        /// <returns>Shape that looks like circle.</returns>
         public static Shape GenerateShapeCircle(int r)
         {
             int centerX = r;

@@ -5,17 +5,22 @@ using UnityEditor;
 
 namespace DTerrain
 {
-    //Uses a Quadtree algorithm to generate a box colliders using List of RLEColumns of a given chunk.
+    //Uses a Quadtree algorithm to generate a box colliders using List of Columns of a given chunk.
     //Also uses PPU and positions of chunk to make every collider fit pixels in our World.
     public class AutomaticMeshCollider : MonoBehaviour
     {
-        List<Rect> rects;
-        List<BoxCollider2D> colliders;
-        public float ppu = 1;
+        private List<Rect> rects;
+        private List<BoxCollider2D> colliders;
+        private float PPU = 1;
 
+        /*
+         * Prepares all colliders.
+         * Deletes previous and adds new by using Quadtree.
+         * Also fits them correctly with texture.
+         */
         public void MakeColliders(List<Column> world, int x, int y, int sizeX, int sizeY)
         {
-            ppu = GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
+            PPU = GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
             float time1 = Time.realtimeSinceStartup;
             if (rects != null) rects.Clear();
 
@@ -32,15 +37,17 @@ namespace DTerrain
             PrepareMesh(world, x, y, sizeX, sizeY);
 
 
+            //Fitting
             foreach (Rect r in rects)
             {
                 BoxCollider2D b = gameObject.AddComponent<BoxCollider2D>();
-                b.offset = new Vector2(-sizeX / ppu / 2f + r.x + r.size.x / 2, -sizeY / ppu / 2f + r.y + r.size.y / 2f);
+                b.offset = new Vector2(-sizeX / PPU / 2f + r.x + r.size.x / 2, -sizeY / PPU / 2f + r.y + r.size.y / 2f);
                 b.size = r.size;
             }
 
             float time2 = Time.realtimeSinceStartup;
 
+            //For debugging. How long it takes to make a colliders.
             //Debug.Log("Created Collider in: " + (time2 - time1));
         }
 
@@ -74,7 +81,7 @@ namespace DTerrain
             }
 
             if (hasAnyGround && !hasAnyAir)
-                rects.Add(new Rect(x / ppu, y / ppu, sizeX / ppu, sizeY / ppu));
+                rects.Add(new Rect(x / PPU, y / PPU, sizeX / PPU, sizeY / PPU));
 
             return;
         }

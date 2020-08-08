@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace DTerrain
 {
+    /// <summary>
+    /// World is a composite of chunks. Inits them and redirects all operations to the chunks.
+    /// </summary>
     public class World : MonoBehaviour
     {
         [SerializeField]
@@ -32,18 +35,19 @@ namespace DTerrain
         {
             CreateChunks();
             Camera.main.transform.position = new Vector3((float)originalTexture.width/PPU/2.0f, (float)originalTexture.height/PPU/2.0f, -10.0f);
-
-            List<BoxCollider2D> cls = new List<BoxCollider2D>();
         }
 
         void Update()
         {
         }
 
+        /// <summary>
+        /// Inits all chunks. Splits textures for them and makes sure they get DestructibleTerrainChunk.
+        /// </summary>
         void CreateChunks()
         {
             chunks = new List<DestructibleTerrainChunk>();
-            Texture2D[] piecies = new Texture2D[chunksX*chunksY];
+            Texture2D[] pieces = new Texture2D[chunksX*chunksY];
             chunkSizeX = originalTexture.width/chunksX;
             chunkSizeY = originalTexture.height/chunksY;
 
@@ -55,7 +59,7 @@ namespace DTerrain
                     piece.filterMode = FilterMode.Point;
                     piece.SetPixels(0,0,chunkSizeX,chunkSizeY, originalTexture.GetPixels(i*chunkSizeX,j*chunkSizeY,chunkSizeX,chunkSizeY));
                     piece.Apply();
-                    piecies[i*chunksY + j] = piece;
+                    pieces[i*chunksY + j] = piece;
 
                     GameObject c = Instantiate(baseChunk);
                     c.transform.position = gameObject.transform.position+new Vector3(i*(float)chunkSizeX/PPU,j*(float)chunkSizeY/PPU,0);
@@ -150,6 +154,11 @@ namespace DTerrain
             return false;
         }
 
+        /// <summary>
+        /// Given a position on the scene, returns a position in the World.
+        /// </summary>
+        /// <param name="scenePos">Position in scene. Remember to make World offset (0,0).</param>
+        /// <returns></returns>
         public Vector2Int ScenePositionToWorldPosition(Vector2 scenePos)
         {
             return new Vector2Int(SceneCoorinateToWorldCoordinate(scenePos.x), SceneCoorinateToWorldCoordinate(scenePos.y));

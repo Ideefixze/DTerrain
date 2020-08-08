@@ -8,7 +8,8 @@ namespace DTerrain
     public class DestructibleTerrainChunk : MonoBehaviour
     {
         public bool updateTerrainOnNextFrame = false;
-        public FilterMode filterMode;
+        [SerializeField]
+        private FilterMode filterMode;
 
         /*
          * DTerrain uses a list of columns (list of ranges) to determine which tile is occupied.
@@ -22,6 +23,22 @@ namespace DTerrain
         Texture2D finalTexture; //Final texture shown to the player.
         Sprite sprite; // Sprite used by SpriteRenderer.
 
+        void Start()
+        {
+            InitChunk();
+        }
+
+        void Update()
+        {
+            if (updateTerrainOnNextFrame)
+            {
+                UpdateTexture();
+                GetComponent<AutomaticMeshCollider>()?.MakeColliders(columns, 0, 0, terrainTexture.width, terrainTexture.height);
+
+                updateTerrainOnNextFrame = false;
+            }
+        }
+
         // Start is called before the first frame update
         public Texture2D GetTerrainTexture()
         {
@@ -31,7 +48,12 @@ namespace DTerrain
         {
             return outlineTexture;
         }
-        void Start()
+
+        /*
+         * Prepares textures used in process.
+         * finalTexture = terrainTexture(copy of an orginal Texture, that is being changed) + outlineTexture(black outline on destruction)
+         */
+        public void InitChunk()
         {
             columns = new List<Column>();
 
@@ -60,9 +82,8 @@ namespace DTerrain
             GetComponent<SpriteRenderer>().sprite = sprite;
 
             updateTerrainOnNextFrame = true;
-
-
         }
+
 
         void UpdateWorld()
         {
@@ -73,18 +94,14 @@ namespace DTerrain
             }
 
         }
-        void Update()
-        {
-            if (updateTerrainOnNextFrame)
-            {
-                UpdateTexture();
-                GetComponent<AutomaticMeshCollider>()?.MakeColliders(columns, 0, 0, terrainTexture.width, terrainTexture.height);
 
-                updateTerrainOnNextFrame = false;
-            }
-        }
-
-        //Returns true if it changed at least one pixel in texture
+        /// <summary>
+        /// Destroys a single tile/pixel on the bitmap. Warning: use large power. Lower values are not supported and may cause weird looking texture. You can expand on this idea.
+        /// </summary>
+        /// <param name="x">X coord.</param>
+        /// <param name="y">Y coord.</param>
+        /// <param name="power">Power of change (how colors should change)</param>
+        /// <returns></returns>
         public bool DestroyTerrain(int x, int y, float power)
         {
             if (x >= 0 && x < terrainTexture.width && y >= 0 && y < terrainTexture.height)
@@ -116,6 +133,13 @@ namespace DTerrain
             MakeOutline(pos.x, pos.y, outlineCol);
         }
 
+        /// <summary>
+        /// Cuts a shape in the world.
+        /// </summary>
+        /// <param name="x">Pos x of shape in world.</param>
+        /// <param name="y">Pos y of shape in world.</param>
+        /// <param name="s">Shape.</param>
+        /// <param name="power">Power of destruction.</param>
         public void DestroyTerrainWithShape(int x, int y, Shape s, float power)
         {
             int k = 0;
@@ -141,6 +165,9 @@ namespace DTerrain
             DestroyTerrainWithShape(pos.x, pos.y, s, power);
         }
 
+        /// <summary>
+        /// Recreates final texture.
+        /// </summary>
         void UpdateTexture()
         {
             terrainTexture.Apply();
@@ -173,13 +200,15 @@ namespace DTerrain
             outlineTexture.Apply();
         }
 
+        /// <summary>
+        /// Using terrainTexture creates a list of collumns (tiles that are egible for collider).
+        /// </summary>
         void PrepareColumns()
         {
-            Color[] colorMap = new Color[terrainTexture.width * terrainTexture.height];
-            colorMap = terrainTexture.GetPixels(0, 0, terrainTexture.width, terrainTexture.height, 0);
             columns.Clear();
             columns = new List<Column>();
 
+            //Iterate texture
             for (int x = 0; x < terrainTexture.width; x++)
             {
                 Column c = new Column(x);
@@ -194,10 +223,10 @@ namespace DTerrain
                     }
                     if (potentialMin <= potentialMax)
                     {
-                        c.AddRange(potentialMin, potentialMax);
+                        c.AddRange(potentialMin, potentialMax); //Add range to a column...
                     }
                 }
-                columns.Add(c);
+                columns.Add(c); //And add the collumn!
             }
         }
 

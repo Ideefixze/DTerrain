@@ -22,7 +22,7 @@ namespace DTerrain
             World world = FindObjectOfType<World>();
             if (Input.GetMouseButton(0))
             {
-                Vector3 mPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector3 mPos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - world.transform.position;
                 Vector2Int wPos = world.ScenePositionToWorldPosition(mPos);
                 world.DestroyTerrainWithShape(wPos.x -radius, wPos.y-radius, destructionShape, 10f);
             }

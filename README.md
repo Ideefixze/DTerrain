@@ -22,6 +22,8 @@ Whenever a change is made (destruction) each **Chunk** recalculates sub-textures
 *Increase number of chunks or reduce number of operations done on world per frame. I try my best to optimize it.*
 ### I can't access any of the components from this package.
 *Make sure you add ```using DTerrain;``` at the begining of you scripts.*
+### What is "power" in destruction?
+It affects how tile is changed (alpha and color blend to dark and transparent). At this moment you should use full power (~10f) while destroying as lower power would cause outline not to fit with texture.
 ### Will it work with my Unity version?
 *It should as code is universal and doesn't use version specific tweaks in Unity (only BoxColliders2D).*
 ### Can I use it for free?

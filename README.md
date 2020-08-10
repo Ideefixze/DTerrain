@@ -19,8 +19,10 @@ Each **Chunk** has their sub-texture made from original Texture. I found out tha
 
 Whenever a change is made (destruction) each **Chunk** recalculates sub-textures based on their **Columns** and recreates BoxColliders2D using Quadtree to fit new terrain.
 
-### How I can make it work faster?
-*Increase number of chunks or reduce number of operations done on world per frame. I try my best to optimize it.*
+### Would it work in realtime game?
+Yes. Example scene rarely goes below ~100 FPS on my machine and it contains world destruction every frame.
+### How I can make it work even faster?
+*Increase number of chunks or reduce number of operations done on world per frame.*
 ### I can't access any of the components from this package.
 *Make sure you add ```using DTerrain;``` at the begining of you scripts.*
 ### What is "power" in destruction?
@@ -29,3 +31,6 @@ It affects how tile is changed (alpha and color blend to dark and transparent). 
 *It should as code is universal and doesn't use version specific tweaks in Unity (only BoxColliders2D).*
 ### Can I use it for free?
 *Yes.*
+
+## Special thanks:
+- **/u/idbrii** for pointing out a fix that nearly doubled the FPS.

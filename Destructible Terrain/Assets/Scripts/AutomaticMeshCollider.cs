@@ -10,46 +10,70 @@ namespace DTerrain
     public class AutomaticMeshCollider : MonoBehaviour
     {
         private List<Rect> rects;
-        private List<BoxCollider2D> colliders;
         private float PPU = 1;
 
         /*
          * Prepares all colliders.
-         * Deletes previous and adds new by using Quadtree.
+         * Deletes previous BoxColliders2D and adds new by using Quadtree.
          * Also fits them correctly with texture.
+         * 
+         * Thanks for /u/idbrii for pointing out overkill in deletion/addition of BoxColliders2D.
          */
         public void MakeColliders(List<Column> world, int x, int y, int sizeX, int sizeY)
         {
             PPU = GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
+
             float time1 = Time.realtimeSinceStartup;
             if (rects != null) rects.Clear();
 
-            foreach (Component b in gameObject.GetComponents<Component>())
-            {
-                if (b is BoxCollider2D)
-                {
-                    Destroy(b);
-                }
-            }
+            List<BoxCollider2D> colls = new List<BoxCollider2D>(gameObject.GetComponents<BoxCollider2D>());
 
             rects = new List<Rect>();
 
             PrepareMesh(world, x, y, sizeX, sizeY);
 
-
-            //Fitting
-            foreach (Rect r in rects)
+            //Assume all colliders would be deleted. We use enabled for that.
+            foreach (BoxCollider2D b in colls)
             {
-                BoxCollider2D b = gameObject.AddComponent<BoxCollider2D>();
-                b.offset = new Vector2(-sizeX / PPU / 2f + r.x + r.size.x / 2, -sizeY / PPU / 2f + r.y + r.size.y / 2f);
-                b.size = r.size;
+                b.enabled = false;
+            }
+
+            //For each Rect found from Collumns (Quadtree in PrepareMesh)...
+            foreach (Rect r in rects)
+            { 
+                //Newly created collider will have an offset equeal to that.
+                Vector2 rColliderOffset = new Vector2(-sizeX / PPU / 2f + r.x + r.size.x / 2, -sizeY / PPU / 2f + r.y + r.size.y / 2f);
+                
+                //Find already existing BoxCollider2D that would fit newly created BoxCollider2D.
+                BoxCollider2D boxC = colls.Find(coll => coll.offset == rColliderOffset && coll.size == r.size);
+                if(!boxC)
+                {
+                    //Not found? Create new one.
+                    BoxCollider2D b = gameObject.AddComponent<BoxCollider2D>();
+                    b.offset = rColliderOffset;
+                    b.size = r.size;
+                }
+                else
+                {
+                    //Found. It won't be deleted!
+                    boxC.enabled = true;
+                }
+
+            }
+
+            //All BoxColliders2D that were modified and haven't been found are deleted.
+            foreach (BoxCollider2D b in colls)
+            {
+                if (b.enabled == false)
+                    Destroy(b);
             }
 
             float time2 = Time.realtimeSinceStartup;
 
-            //For debugging. How long it takes to make a colliders.
-            //Debug.Log("Created Collider in: " + (time2 - time1));
+            //For testing. How long it takes to make a colliders.
+            //Debug.Log("#Created Collider in: " + (time2 - time1));
         }
+      
 
         //Simple quadtree algortihm
         public void PrepareMesh(List<Column> world, int x, int y, int sizeX, int sizeY)

@@ -26,6 +26,7 @@ namespace DTerrain
         void Start()
         {
             InitChunk();
+            GetComponent<AutomaticMeshCollider>()?.MakeColliders(columns, 0, 0, terrainTexture.width, terrainTexture.height);
         }
 
         void Update()
@@ -82,6 +83,8 @@ namespace DTerrain
             GetComponent<SpriteRenderer>().sprite = sprite;
 
             updateTerrainOnNextFrame = true;
+
+
         }
 
 

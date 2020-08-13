@@ -11,6 +11,10 @@ namespace DTerrain
         [SerializeField]
         private FilterMode filterMode;
 
+        [SerializeField]
+        [Range(0f, 1f)]
+        private float alphaTreshold=0.05f;
+
         /*
          * DTerrain uses a list of columns (list of ranges) to determine which tile is occupied.
          * This makes game run faster than holding every pixel/tile as a separate object.
@@ -219,7 +223,7 @@ namespace DTerrain
                 {
                     int potentialMin = y;
                     int potentialMax = y - 1;
-                    while (y < terrainTexture.height && terrainTexture.GetPixel(x, y).a > 0.01f)
+                    while (y < terrainTexture.height && terrainTexture.GetPixel(x, y).a > alphaTreshold)
                     {
                         y++;
                         potentialMax++;

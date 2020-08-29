@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 namespace DTerrain
@@ -32,6 +33,8 @@ namespace DTerrain
         {
             Debug.Log("Range: [ " + min + " , " + max + " ]");
         }
+
+        
     }
 
     //Column represents a list of ranges: [ [min1;max1], [min2;max2] ... ].
@@ -94,16 +97,18 @@ namespace DTerrain
             }
         }
 
-        //Deletes a range from collumn.
-        //May be buggy.
-        public void DelRange(Range delr)
+        //Deletes a range from column.
+        //May be buggy for len=1 ranges.
+        public bool DelRange(Range delr)
         {
             int a = delr.min;
             int b = delr.max;
+            bool changed = false;
             for (int i = 0; i < ranges.Count; i++)
             {
                 if (ranges[i].min < a && ranges[i].max > b) ///0---a-----b----1
                 {
+                    changed = true;
                     if (Mathf.Abs(a - b) == 0)
                     {
                         ranges.Add(new Range(ranges[i].min, a - 1));
@@ -115,10 +120,12 @@ namespace DTerrain
                     ranges.Add(new Range(b, ranges[i].max));
                     ranges.Remove(ranges[i]);
                     break;
+                    
                 }
 
                 if (ranges[i].min >= a && ranges[i].max <= b) ///-------a-0---1--b
                 {
+                    changed = true;
                     ranges.Remove(ranges[i]);
                     i--;
                     continue;
@@ -126,6 +133,7 @@ namespace DTerrain
 
                 if (ranges[i].min < a && ranges[i].max <= b && ranges[i].max > a) ///-------0--a---1---b
                 {
+                    changed = true;
                     ranges.Add(new Range(ranges[i].min, a));
                     ranges.Remove(ranges[i]);
                     i--;
@@ -134,12 +142,14 @@ namespace DTerrain
 
                 if (ranges[i].min >= a && ranges[i].max > b && ranges[i].min < b) ///--a-0----b---1--
                 {
+                    changed = true;
                     ranges.Add(new Range(b, ranges[i].max));
                     ranges.Remove(ranges[i]);
                     i--;
                     continue;
                 }
             }
+            return changed;
         }
 
     }

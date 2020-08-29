@@ -79,14 +79,12 @@ namespace DTerrain
             }
         }
 
-
-
         public void DestroyTerrainWithShape(Vector2Int v, Shape s, float power)
         {
             DestroyTerrainWithShape(v.x, v.y, s, power);
         }
 
-        public void DestroyTerrainWithShape(int x, int y, Shape s, float power)
+        public void DestroyTerrainWithShapeOld(int x, int y, Shape s, float power)
         {
             int k = 0;
             foreach(Range r in s.columns)
@@ -105,9 +103,49 @@ namespace DTerrain
             }
         }
 
+        public void DestroyTerrainWithShape(int x, int y, Shape s, float power)
+        {
+            int k = 0;
+            foreach (Range r in s.columns)
+            {
+                DestroyTerrainWithRange(x+k,y,r, s.height);
+                k++;
+            }
+        }
+
         public bool DestroyTerrain(Vector2Int v, float power)
         {
             return DestroyTerrain(v.x, v.y, power);
+        }
+
+        public bool DestroyTerrainWithRange(int x, int y, Range r, int height)
+        {
+
+            int xchunk = (x + chunkSizeX / 2) / chunkSizeX;
+            int ychunk = (y + chunkSizeY / 2) / chunkSizeY;
+            int posInChunkX = x - xchunk * chunkSizeX + chunkSizeX / 2;
+            int posInChunkY = y - ychunk * chunkSizeY + chunkSizeY / 2;
+            int cid = xchunk * chunksY + ychunk;
+            int k = 0;
+            while (true)
+            {
+                if (cid >= 0 && cid < chunks.Count && k+ychunk<chunksY && (k-1)*chunkSizeY<=height)
+                {
+                    if(chunks[cid].DestroyTerrainWithRange(posInChunkX, posInChunkY - k * chunkSizeY, r))
+                        chunks[cid].updateTerrainOnNextFrame = true;
+
+                    cid++;
+                    k++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            
+
+            return false;
+
         }
 
         public bool DestroyTerrain(int x, int y, float power)
@@ -119,8 +157,8 @@ namespace DTerrain
             int cid = xchunk*chunksY + ychunk;
             if(cid>=0 && cid<chunks.Count)
             {
-                chunks[xchunk*chunksY + ychunk].updateTerrainOnNextFrame=true;
-                return chunks[xchunk*chunksY + ychunk].DestroyTerrain(posInChunkX,posInChunkY,power);
+                chunks[cid].updateTerrainOnNextFrame=true;
+                return chunks[cid].DestroyTerrain(posInChunkX,posInChunkY,power);
             }
             return false;
         }
@@ -134,8 +172,8 @@ namespace DTerrain
             int cid = xchunk*chunksY + ychunk;
             if(cid>=0 && cid<chunks.Count)
             {
-                chunks[xchunk*chunksY + ychunk].updateTerrainOnNextFrame=true;
-                chunks[xchunk*chunksY + ychunk].MakeOutline(posInChunkX,posInChunkY,Color.black);
+                chunks[cid].updateTerrainOnNextFrame=true;
+                chunks[cid].MakeOutline(posInChunkX,posInChunkY,Color.black);
             }
         
         }
@@ -149,7 +187,7 @@ namespace DTerrain
             int cid = xchunk*chunksY + ychunk;
             if(cid>=0 && cid<chunks.Count)
             {
-                return chunks[xchunk*chunksY + ychunk].FilledAt(posInChunkX, posInChunkY);
+                return chunks[cid].FilledAt(posInChunkX, posInChunkY);
             }
             return false;
         }

@@ -167,6 +167,18 @@ namespace DTerrain
             }
         }
 
+        public bool DestroyTerrainWithRange(int x, int y, Range r)
+        {
+            int w = terrainTexture.width;
+            int h = terrainTexture.height;
+            for (int i = r.min + y; i <= r.max + y;i++)//TODO: Maybe it can be changed into SetPixels() to get more FPS?
+            {
+                if (x >= 0 && x < w && i >= 0 && i < h)
+                    terrainTexture.SetPixel(x, i, new Color(0,0,0,0)); 
+            }
+            return columns[x].DelRange(new Range(r.min + y, r.max + y));
+        }
+
         public void DestroyTerrainWithShape(Vector2Int pos, Shape s, float power)
         {
             DestroyTerrainWithShape(pos.x, pos.y, s, power);

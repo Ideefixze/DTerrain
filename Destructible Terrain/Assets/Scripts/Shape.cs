@@ -14,6 +14,7 @@ namespace DTerrain
         int _height;
 
         public List<Range> columns;
+        public Color outlineColor=Color.black;
 
         public int width { get => _width; private set => _width = value; }
         public int height { get => _height; private set => _height = value; }

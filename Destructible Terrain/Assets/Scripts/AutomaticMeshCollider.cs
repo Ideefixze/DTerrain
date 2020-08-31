@@ -76,7 +76,7 @@ namespace DTerrain
       
 
         //Simple quadtree algortihm
-        public void PrepareMesh(List<Column> world, int x, int y, int sizeX, int sizeY)
+        public void PrepareMesh(List<Column> chunk, int x, int y, int sizeX, int sizeY)
         {
             bool hasAnyAir = false;
             bool hasAnyGround = false;
@@ -86,7 +86,7 @@ namespace DTerrain
                 for (int j = y; j < y + sizeY; j++)
                 {
 
-                    if (world[i].isWithin(j))
+                    if (chunk[i].isWithin(j))
                         hasAnyGround = true;
                     else
                         hasAnyAir = true;
@@ -94,10 +94,10 @@ namespace DTerrain
 
                     if (hasAnyAir && hasAnyGround)
                     {
-                        PrepareMesh(world, x, y, sizeX / 2, sizeY / 2);
-                        PrepareMesh(world, x + sizeX / 2, y, sizeX / 2, sizeY / 2);
-                        PrepareMesh(world, x, y + sizeY / 2, sizeX / 2, sizeY / 2);
-                        PrepareMesh(world, x + sizeX / 2, y + sizeY / 2, sizeX / 2, sizeY / 2);
+                        PrepareMesh(chunk, x, y, sizeX / 2, sizeY / 2);
+                        PrepareMesh(chunk, x + sizeX / 2, y, sizeX / 2, sizeY / 2);
+                        PrepareMesh(chunk, x, y + sizeY / 2, sizeX / 2, sizeY / 2);
+                        PrepareMesh(chunk, x + sizeX / 2, y + sizeY / 2, sizeX / 2, sizeY / 2);
                         return;
                     }
                 }

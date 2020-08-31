@@ -79,31 +79,42 @@ namespace DTerrain
             }
         }
 
-        public void DestroyTerrainWithShape(Vector2Int v, Shape s, float power)
+        public void DestroyTerrainWithShape(Vector2Int v, Shape s)
         {
-            DestroyTerrainWithShape(v.x, v.y, s, power);
+            DestroyTerrainWithShape(v.x, v.y, s);
         }
-
-        public void DestroyTerrainWithShapeOld(int x, int y, Shape s, float power)
+        /// <summary>
+        /// Deprecated DestroyTerrainWithShape as it goes pixel by pixel to delete terrain.
+        /// </summary>
+        /// <param name="x">X coord</param>
+        /// <param name="y">Y coord</param>
+        /// <param name="s">Shape to delete terrain with</param>
+        public void DestroyTerrainWithShapeOld(int x, int y, Shape s)
         {
             int k = 0;
             foreach(Range r in s.columns)
             {
-                MakeOutline(x+k,y+r.min,Color.black);
+                MakeOutline(x+k,y+r.min, s.outlineColor);
                 for(int i = r.min+1; i<r.max-1;i++)
                 {
                     if(k>0 && k<s.columns.Count-1)
-                        DestroyTerrain(x+k,y+i,power);
+                        DestroyTerrainAtPixel(x+k,y+i);
                     else
-                        MakeOutline(x+k,y+i,Color.black);
+                        MakeOutline(x+k,y+i,s.outlineColor);
 
                 }
-                MakeOutline(x+k,y+r.max-1,Color.black);
+                MakeOutline(x+k,y+r.max-1, s.outlineColor);
                 k++;
             }
         }
 
-        public void DestroyTerrainWithShape(int x, int y, Shape s, float power)
+        /// <summary>
+        /// Deletes terrain using each range in the shape. Much faster than deprecated pixel by pixel solution.
+        /// </summary>
+        /// <param name="x">X coord</param>
+        /// <param name="y">Y coord</param>
+        /// <param name="s">Shape to delete terrain with</param>
+        public void DestroyTerrainWithShape(int x, int y, Shape s)
         {
             int k = 0;
             foreach (Range r in s.columns)
@@ -113,9 +124,9 @@ namespace DTerrain
             }
         }
 
-        public bool DestroyTerrain(Vector2Int v, float power)
+        public bool DestroyTerrainAtPixel(Vector2Int v)
         {
-            return DestroyTerrain(v.x, v.y, power);
+            return DestroyTerrainAtPixel(v.x, v.y);
         }
 
         public bool DestroyTerrainWithRange(int x, int y, Range r, int height)
@@ -126,7 +137,9 @@ namespace DTerrain
             int posInChunkX = x - xchunk * chunkSizeX + chunkSizeX / 2;
             int posInChunkY = y - ychunk * chunkSizeY + chunkSizeY / 2;
             int cid = xchunk * chunksY + ychunk;
+
             int k = 0;
+            //Iterate over possible chunks vertically that can be contained in destruction for this range
             while (true)
             {
                 if (cid >= 0 && cid < chunks.Count && k+ychunk<chunksY && (k-1)*chunkSizeY<=height)
@@ -148,7 +161,7 @@ namespace DTerrain
 
         }
 
-        public bool DestroyTerrain(int x, int y, float power)
+        public bool DestroyTerrainAtPixel(int x, int y)
         {
             int xchunk = (x+chunkSizeX/2)/chunkSizeX;
             int ychunk = (y+chunkSizeY/2)/chunkSizeY;
@@ -158,7 +171,7 @@ namespace DTerrain
             if(cid>=0 && cid<chunks.Count)
             {
                 chunks[cid].updateTerrainOnNextFrame=true;
-                return chunks[cid].DestroyTerrain(posInChunkX,posInChunkY,power);
+                return chunks[cid].DestroyTerrainAtPixel(posInChunkX,posInChunkY);
             }
             return false;
         }
@@ -173,7 +186,7 @@ namespace DTerrain
             if(cid>=0 && cid<chunks.Count)
             {
                 chunks[cid].updateTerrainOnNextFrame=true;
-                chunks[cid].MakeOutline(posInChunkX,posInChunkY,Color.black);
+                chunks[cid].MakeOutline(posInChunkX,posInChunkY,outlineCol);
             }
         
         }

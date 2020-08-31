@@ -9,11 +9,12 @@ namespace DTerrain
     {
         public bool updateTerrainOnNextFrame = false;
         [SerializeField]
-        private FilterMode filterMode;
+        private FilterMode filterMode=FilterMode.Point;
 
         [SerializeField]
         [Range(0f, 1f)]
         private float alphaTreshold=0.05f;
+
 
         /*
          * DTerrain uses a list of columns (list of ranges) to determine which tile is occupied.
@@ -21,11 +22,11 @@ namespace DTerrain
          * */
         List<Column> columns;
 
-        Texture2D loadedTexture; //Original texture loaded from spriteRenderer.
-        Texture2D terrainTexture; //Texture ingame. This texture changes itself.
-        Texture2D outlineTexture; //Black pixel outline around solid terrain.
-        Texture2D finalTexture; //Final texture shown to the player.
-        Sprite sprite; // Sprite used by SpriteRenderer.
+        Texture2D loadedTexture;    //Original texture loaded from spriteRenderer.
+        Texture2D terrainTexture;   //Texture ingame. This texture changes itself.
+        Texture2D outlineTexture;   //Black pixel outline around solid terrain.
+        Texture2D finalTexture;     //Final texture shown to the player.
+        Sprite sprite;              // Sprite used by SpriteRenderer.
 
         void Start()
         {
@@ -91,7 +92,6 @@ namespace DTerrain
 
         }
 
-
         void UpdateWorld()
         {
             if (terrainTexture != null)
@@ -103,27 +103,49 @@ namespace DTerrain
         }
 
         /// <summary>
-        /// Destroys a single tile/pixel on the bitmap. Warning: use large power. Lower values are not supported and may cause weird looking texture. You can expand on this idea.
+        /// Destroys a single pixel on the bitmap. Warning: use large power. Lower values are not supported and may cause weird looking texture. You can expand on this idea.
         /// </summary>
         /// <param name="x">X coord.</param>
         /// <param name="y">Y coord.</param>
-        /// <param name="power">Power of change (how colors should change)</param>
         /// <returns></returns>
-        public bool DestroyTerrain(int x, int y, float power)
+        public bool DestroyTexture(int x, int y)
+        { 
+
+            terrainTexture.SetPixel(x, y, Color.clear);
+
+            outlineTexture.SetPixel(x, y, Color.clear);
+
+            return true;
+        }
+
+        public bool DestroyTexture(int x, int y, int w, int h)
+        {
+            Color[] c = new Color[w*h];
+            for (int i = 0; i < w * h; i++)
+                c[i] = Color.clear;
+
+            terrainTexture.SetPixels(x, y, w,h, c);
+
+            outlineTexture.SetPixels(x, y, w,h, c);
+
+            return true;
+        }
+
+        public bool DestroyTerrainAtPixel(int x, int y)
         {
             if (x >= 0 && x < terrainTexture.width && y >= 0 && y < terrainTexture.height)
             {
-                terrainTexture.SetPixel(x, y, terrainTexture.GetPixel(x, y) + new Color(-.05f * power, -.05f * power, -.05f * power, -0.25f * power));
+                DestroyTexture(x,y);
 
-                outlineTexture.SetPixel(x, y, Color.clear);
                 columns[x].SingleDelRange(y);
+
                 return true;
             }
             return false;
         }
-        public bool DestroyTerrain(Vector2Int pos, float power)
+        public bool DestroyTerrainAtPixel(Vector2Int pos)
         {
-            return DestroyTerrain(pos.x, pos.y, power);
+            return DestroyTerrainAtPixel(pos.x, pos.y);
         }
 
         public void MakeOutline(int x, int y, Color outlineCol)
@@ -141,13 +163,13 @@ namespace DTerrain
         }
 
         /// <summary>
-        /// Cuts a shape in the world.
+        /// Cuts a shape in the world. Currently unsupported: World uses DestroyTerrainWithRange to cut with shape.
         /// </summary>
         /// <param name="x">Pos x of shape in world.</param>
         /// <param name="y">Pos y of shape in world.</param>
         /// <param name="s">Shape.</param>
         /// <param name="power">Power of destruction.</param>
-        public void DestroyTerrainWithShape(int x, int y, Shape s, float power)
+        public void DestroyTerrainWithShape(int x, int y, Shape s)
         {
             int k = 0;
             bool changed = false;
@@ -157,7 +179,7 @@ namespace DTerrain
                 for (int i = r.min + 1; i < r.max - 1; i++)
                 {
                     if (k > 0 && k < s.columns.Count - 1)
-                        changed = DestroyTerrain(x + k, y + i, power);
+                        changed = DestroyTexture(x + k, y + i);
                     else
                         MakeOutline(x + k, y + i, Color.black);
 
@@ -167,25 +189,35 @@ namespace DTerrain
             }
         }
 
+        public void DestroyTerrainWithShape(Vector2Int pos, Shape s)
+        {
+            DestroyTerrainWithShape(pos.x, pos.y, s);
+        }
+
+        /// <summary>
+        /// Destroys a terrain using a range at given coordinates.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="r"></param>
+        /// <returns></returns>
         public bool DestroyTerrainWithRange(int x, int y, Range r)
         {
             int w = terrainTexture.width;
             int h = terrainTexture.height;
-            for (int i = r.min + y; i <= r.max + y;i++)//TODO: Maybe it can be changed into SetPixels() to get more FPS?
-            {
-                if (x >= 0 && x < w && i >= 0 && i < h)
-                    terrainTexture.SetPixel(x, i, new Color(0,0,0,0)); 
-            }
+            if (x < 0 && x >= w) return false;
+
+            int a = Mathf.Max(0, r.min+y);
+            int b = Mathf.Min(h, r.max+y+1);
+
+            if(b>a)
+                DestroyTexture(x, a, 1, b - a);
+
             return columns[x].DelRange(new Range(r.min + y, r.max + y));
         }
 
-        public void DestroyTerrainWithShape(Vector2Int pos, Shape s, float power)
-        {
-            DestroyTerrainWithShape(pos.x, pos.y, s, power);
-        }
-
         /// <summary>
-        /// Recreates final texture.
+        /// Recreates final texture that consists of initial texture (that was possibly changed) and outline.
         /// </summary>
         void UpdateTexture()
         {

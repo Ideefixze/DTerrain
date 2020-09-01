@@ -17,7 +17,7 @@ namespace DTerrain
 
 
         /*
-         * DTerrain uses a list of columns (list of ranges) to determine which tile is occupied.
+         * DTerrain uses a list of ranges (list of ranges) to determine which tile is occupied.
          * This makes game run faster than holding every pixel/tile as a separate object.
          * */
         List<Column> columns;
@@ -81,7 +81,7 @@ namespace DTerrain
             finalTexture = new Texture2D(loadedTexture.width, loadedTexture.height);
             finalTexture.filterMode = filterMode;
 
-            UpdateWorld();
+            UpdateWorldColumns();
             UpdateTexture();
 
             sprite = Sprite.Create(finalTexture, new Rect(0, 0, finalTexture.width, finalTexture.height), new Vector2(0.5f, 0.5f), loadedSprite.pixelsPerUnit);
@@ -92,7 +92,7 @@ namespace DTerrain
 
         }
 
-        void UpdateWorld()
+        void UpdateWorldColumns()
         {
             if (terrainTexture != null)
             {
@@ -100,6 +100,12 @@ namespace DTerrain
 
             }
 
+        }
+
+
+        public Color ColorAt(int x, int y)
+        {
+            return loadedTexture.GetPixel(x, y);
         }
 
         /// <summary>
@@ -131,7 +137,7 @@ namespace DTerrain
             return true;
         }
 
-        public bool DestroyTerrainAtPixel(int x, int y)
+        public bool DestroyTerrain(int x, int y)
         {
             if (x >= 0 && x < terrainTexture.width && y >= 0 && y < terrainTexture.height)
             {
@@ -139,21 +145,26 @@ namespace DTerrain
 
                 columns[x].SingleDelRange(y);
 
+                updateTerrainOnNextFrame = true;
+
                 return true;
             }
             return false;
         }
-        public bool DestroyTerrainAtPixel(Vector2Int pos)
+        public bool DestroyTerrain(Vector2Int pos)
         {
-            return DestroyTerrainAtPixel(pos.x, pos.y);
+            return DestroyTerrain(pos.x, pos.y);
         }
 
         public void MakeOutline(int x, int y, Color outlineCol)
         {
             if (x >= 0 && x < terrainTexture.width && y >= 0 && y < terrainTexture.height)
             {
-                if (terrainTexture.GetPixel(x, y).a >= 0.01f)
+                if (terrainTexture.GetPixel(x, y).a > alphaTreshold)
+                {
                     outlineTexture.SetPixel(x, y, outlineCol);
+                    updateTerrainOnNextFrame = true;
+                }
             }
         }
 
@@ -169,16 +180,16 @@ namespace DTerrain
         /// <param name="y">Pos y of shape in world.</param>
         /// <param name="s">Shape.</param>
         /// <param name="power">Power of destruction.</param>
-        public void DestroyTerrainWithShape(int x, int y, Shape s)
+        public void DestroyTerrain(int x, int y, Shape s)
         {
             int k = 0;
             bool changed = false;
-            foreach (Range r in s.columns)
+            foreach (Range r in s.ranges)
             {
                 MakeOutline(x + k, y + r.min, Color.black);
                 for (int i = r.min + 1; i < r.max - 1; i++)
                 {
-                    if (k > 0 && k < s.columns.Count - 1)
+                    if (k > 0 && k < s.ranges.Count - 1)
                         changed = DestroyTexture(x + k, y + i);
                     else
                         MakeOutline(x + k, y + i, Color.black);
@@ -189,9 +200,9 @@ namespace DTerrain
             }
         }
 
-        public void DestroyTerrainWithShape(Vector2Int pos, Shape s)
+        public void DestroyTerrain(Vector2Int pos, Shape s)
         {
-            DestroyTerrainWithShape(pos.x, pos.y, s);
+            DestroyTerrain(pos.x, pos.y, s);
         }
 
         /// <summary>
@@ -201,7 +212,7 @@ namespace DTerrain
         /// <param name="y"></param>
         /// <param name="r"></param>
         /// <returns></returns>
-        public bool DestroyTerrainWithRange(int x, int y, Range r)
+        public bool DestroyTerrain(int x, int y, Range r)
         {
             int w = terrainTexture.width;
             int h = terrainTexture.height;
@@ -221,6 +232,7 @@ namespace DTerrain
         /// </summary>
         void UpdateTexture()
         {
+            outlineTexture.Apply();
             terrainTexture.Apply();
 
             Color[] clrs = new Color[(loadedTexture.width * loadedTexture.height)];
@@ -252,7 +264,7 @@ namespace DTerrain
         }
 
         /// <summary>
-        /// Using terrainTexture creates a list of collumns (tiles that are egible for collider).
+        /// Using terrainTexture creates a list of ranges (tiles that are egible for collider).
         /// </summary>
         void PrepareColumns()
         {
@@ -277,7 +289,7 @@ namespace DTerrain
                         c.AddRange(potentialMin, potentialMax); //Add range to a column...
                     }
                 }
-                columns.Add(c); //And add the collumn!
+                columns.Add(c); //And add the column!
             }
         }
 

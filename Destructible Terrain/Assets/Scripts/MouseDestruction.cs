@@ -9,12 +9,16 @@ namespace DTerrain
         [Tooltip("Radius of circle that will destroy world on click.")]
         [SerializeField]
         private int radius = 8;
-        private Shape destructionShape;
+        [SerializeField]
+        private int outlineRadius = 12;
+
         private World world;
+
+        private IDestructor destructor;
         // Start is called before the first frame update
         void Start()
         {
-            destructionShape = Shape.GenerateShapeCircle(radius);
+            destructor = new WormsDestructor(radius,outlineRadius);
             world = FindObjectOfType<World>();
         }
 
@@ -25,8 +29,8 @@ namespace DTerrain
             {
                 Vector3 mPos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - world.transform.position; 
                 Vector2Int wPos = world.ScenePositionToWorldPosition(mPos); //Offset should be (0,0) for calcualting our World position thats why we substracted position.
-
-                world.DestroyTerrainWithShape(wPos.x -radius, wPos.y-radius, destructionShape);
+                destructor.Destroy(wPos.x - radius, wPos.y - radius, world);
+                
             }
 
         }
@@ -34,6 +38,7 @@ namespace DTerrain
         {
             Destruction();
         }
+
     }
 }
 

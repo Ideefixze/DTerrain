@@ -7,7 +7,7 @@ namespace DTerrain
     public class MouseBallSpawn : MonoBehaviour
     {
         [SerializeField]
-        private GameObject ball;
+        private GameObject ball=null;
 
         void Update()
         {

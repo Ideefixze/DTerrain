@@ -11,19 +11,19 @@ namespace DTerrain
     {
         [SerializeField]
         [Min(1)]
-        private int chunksX;
+        private int chunksX=16;
         [SerializeField]
         [Min(1)]
-        private int chunksY;
+        private int chunksY=16;
 
         [SerializeField]
-        private Texture2D originalTexture;
+        private Texture2D originalTexture=null;
         [Tooltip("PPU of the used texture.")]
         public int PPU = 32;
 
         [SerializeField]
         [Tooltip("GameObject representing chunk that will be spawned.")]
-        private GameObject baseChunk;
+        private GameObject baseChunk=null;
 
         private int chunkSizeX;
         private int chunkSizeY;
@@ -79,58 +79,56 @@ namespace DTerrain
             }
         }
 
-        public void DestroyTerrainWithShape(Vector2Int v, Shape s)
-        {
-            DestroyTerrainWithShape(v.x, v.y, s);
-        }
         /// <summary>
-        /// Deprecated DestroyTerrainWithShape as it goes pixel by pixel to delete terrain.
+        /// Deletes terrain using each range in the shape.
         /// </summary>
         /// <param name="x">X coord</param>
         /// <param name="y">Y coord</param>
         /// <param name="s">Shape to delete terrain with</param>
-        public void DestroyTerrainWithShapeOld(int x, int y, Shape s)
+        public void DestroyTerrain(int x, int y, Shape s)
         {
             int k = 0;
-            foreach(Range r in s.columns)
+            foreach (Range r in s.ranges)
             {
-                MakeOutline(x+k,y+r.min, s.outlineColor);
-                for(int i = r.min+1; i<r.max-1;i++)
-                {
-                    if(k>0 && k<s.columns.Count-1)
-                        DestroyTerrainAtPixel(x+k,y+i);
-                    else
-                        MakeOutline(x+k,y+i,s.outlineColor);
+                DestroyTerrain(x+k,y,r, s.height);
+                k++;
+            }
+        }
 
-                }
-                MakeOutline(x+k,y+r.max-1, s.outlineColor);
+        public void DestroyTerrain(Vector2Int v, Shape s)
+        {
+            DestroyTerrain(v.x, v.y, s);
+        }
+
+        /// <summary>
+        /// Creates a black outline in the world of given shape
+        /// </summary>
+        /// <param name="x">X coord</param>
+        /// <param name="y">Y coord</param>
+        /// <param name="s">Shape</param>
+        public void MakeOutline(int x, int y, Shape s)
+        {
+            int k = 0;
+            foreach (Range r in s.ranges)
+            {
+                for(int i = r.min;i<r.max;i++)
+                    MakeOutline(x+k,y+i,s.outlineColor);
                 k++;
             }
         }
 
         /// <summary>
-        /// Deletes terrain using each range in the shape. Much faster than deprecated pixel by pixel solution.
+        /// DestroyTerrain used to delete a single range.
         /// </summary>
         /// <param name="x">X coord</param>
         /// <param name="y">Y coord</param>
-        /// <param name="s">Shape to delete terrain with</param>
-        public void DestroyTerrainWithShape(int x, int y, Shape s)
+        /// <param name="r">Range</param>
+        /// <param name="height">Maximum height of an range (used in shape deletion - skip it)</param>
+        /// <returns></returns>
+        public bool DestroyTerrain(int x, int y, Range r, int height=-1)
         {
-            int k = 0;
-            foreach (Range r in s.columns)
-            {
-                DestroyTerrainWithRange(x+k,y,r, s.height);
-                k++;
-            }
-        }
-
-        public bool DestroyTerrainAtPixel(Vector2Int v)
-        {
-            return DestroyTerrainAtPixel(v.x, v.y);
-        }
-
-        public bool DestroyTerrainWithRange(int x, int y, Range r, int height)
-        {
+            if (height == -1)
+                height = r.Length();
 
             int xchunk = (x + chunkSizeX / 2) / chunkSizeX;
             int ychunk = (y + chunkSizeY / 2) / chunkSizeY;
@@ -144,7 +142,7 @@ namespace DTerrain
             {
                 if (cid >= 0 && cid < chunks.Count && k+ychunk<chunksY && (k-1)*chunkSizeY<=height)
                 {
-                    if(chunks[cid].DestroyTerrainWithRange(posInChunkX, posInChunkY - k * chunkSizeY, r))
+                    if(chunks[cid].DestroyTerrain(posInChunkX, posInChunkY - k * chunkSizeY, r))
                         chunks[cid].updateTerrainOnNextFrame = true;
 
                     cid++;
@@ -161,7 +159,7 @@ namespace DTerrain
 
         }
 
-        public bool DestroyTerrainAtPixel(int x, int y)
+        public bool DestroyTerrain(int x, int y)
         {
             int xchunk = (x+chunkSizeX/2)/chunkSizeX;
             int ychunk = (y+chunkSizeY/2)/chunkSizeY;
@@ -170,10 +168,15 @@ namespace DTerrain
             int cid = xchunk*chunksY + ychunk;
             if(cid>=0 && cid<chunks.Count)
             {
-                chunks[cid].updateTerrainOnNextFrame=true;
-                return chunks[cid].DestroyTerrainAtPixel(posInChunkX,posInChunkY);
+                return chunks[cid].DestroyTerrain(posInChunkX,posInChunkY);
             }
             return false;
+        }
+
+
+        public bool DestroyTerrain(Vector2Int v)
+        {
+            return DestroyTerrain(v.x, v.y);
         }
 
         public void MakeOutline(int x, int y, Color outlineCol)
@@ -185,7 +188,6 @@ namespace DTerrain
             int cid = xchunk*chunksY + ychunk;
             if(cid>=0 && cid<chunks.Count)
             {
-                chunks[cid].updateTerrainOnNextFrame=true;
                 chunks[cid].MakeOutline(posInChunkX,posInChunkY,outlineCol);
             }
         
@@ -205,8 +207,24 @@ namespace DTerrain
             return false;
         }
 
+        public Color ColorAt(int x, int y)
+        {
+            int xchunk = (x + chunkSizeX / 2) / chunkSizeX;
+            int ychunk = (y + chunkSizeY / 2) / chunkSizeY;
+            int posInChunkX = x - xchunk * chunkSizeX + chunkSizeX / 2;
+            int posInChunkY = y - ychunk * chunkSizeY + chunkSizeY / 2;
+            int cid = xchunk * chunksY + ychunk;
+            if (cid >= 0 && cid < chunks.Count)
+            {
+                return chunks[cid].ColorAt(posInChunkX, posInChunkY);
+            }
+            return Color.black;
+        }
+
+
         /// <summary>
-        /// Given a position on the scene, returns a position in the World.
+        /// Given a position on the scene, returns a position in the World. World = this world class, not a position in a Unity World.
+        /// Think of it as position on texture (pixels)
         /// </summary>
         /// <param name="scenePos">Position in scene. Remember to make World offset (0,0).</param>
         /// <returns></returns>

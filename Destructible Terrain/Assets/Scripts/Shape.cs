@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DTerrain
 {
     /// <summary>
-    /// Shape is a simple class that holds a list of Ranges (not columns) and then is used to destroy terrain with.
+    /// Shape is a simple class that holds a list of Ranges (not ranges) and then is used to destroy terrain with.
     /// To make complicated shape destructions (not squares, circles etc.) don't use it as it supports only list of ranges.
     /// </summary>
     public class Shape
@@ -13,7 +13,7 @@ namespace DTerrain
         int _width;
         int _height;
 
-        public List<Range> columns;
+        public List<Range> ranges;
         public Color outlineColor=Color.black;
 
         public int width { get => _width; private set => _width = value; }
@@ -23,7 +23,7 @@ namespace DTerrain
         {
             width = w;
             height = h;
-            columns = new List<Range>();
+            ranges = new List<Range>();
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace DTerrain
                 if (down)
                 {
                     Range range = new Range(min, max);
-                    s.columns.Add(range);
+                    s.ranges.Add(range);
                 }
 
             }

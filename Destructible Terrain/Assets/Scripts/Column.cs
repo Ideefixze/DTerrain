@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
@@ -32,6 +33,11 @@ namespace DTerrain
         public void PrintRange()
         {
             Debug.Log("Range: [ " + min + " , " + max + " ]");
+        }
+
+        public static Range operator+(Range r, int a)
+        {
+            return new Range(r.min+a,r.max+a);
         }
 
         

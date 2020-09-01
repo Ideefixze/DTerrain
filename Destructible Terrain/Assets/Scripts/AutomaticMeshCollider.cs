@@ -38,7 +38,7 @@ namespace DTerrain
                 b.enabled = false;
             }
 
-            //For each Rect found from Collumns (Quadtree in PrepareMesh)...
+            //For each Rect found from Columns (Quadtree in PrepareMesh)...
             foreach (Rect r in rects)
             { 
                 //Newly created collider will have an offset equeal to that.

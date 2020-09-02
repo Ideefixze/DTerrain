@@ -5,20 +5,26 @@ using UnityEditor;
 
 namespace DTerrain
 {
-    //Uses a Quadtree algorithm to generate a box colliders using List of Columns of a given chunk.
-    //Also uses PPU and positions of chunk to make every collider fit pixels in our World.
+    ///<summary>
+    ///Uses a Quadtree algorithm to generate a box colliders using List of Columns of a given chunk.
+    ///Also uses PPU and positions of chunk to make every collider fit pixels in our World.
+    ///</summary>
     public class AutomaticMeshCollider : MonoBehaviour
     {
         private List<Rect> rects;
         private float PPU = 1;
 
-        /*
-         * Prepares all colliders.
-         * Deletes previous BoxColliders2D and adds new by using Quadtree.
-         * Also fits them correctly with texture.
-         * 
-         * Thanks for /u/idbrii for pointing out overkill in deletion/addition of BoxColliders2D.
-         */
+
+        /// <summary>
+        /// Prepares all colliders. Deletes previous BoxColliders2D and adds new by using Quadtree. Also fits them correctly with texture.
+        /// 
+        /// <para>Thanks for /u/idbrii for pointing out overkill in deletion/addition of BoxColliders2D.</para>
+        /// </summary>
+        /// <param name="world">List of columns (chunk data) to find potential colliding pixels</param>
+        /// <param name="x">Chunk offset X</param>
+        /// <param name="y">Chunk offset Y</param>
+        /// <param name="sizeX">Size of an chunk X</param>
+        /// <param name="sizeY">Size of an chunk Y</param>
         public void MakeColliders(List<Column> world, int x, int y, int sizeX, int sizeY)
         {
             PPU = GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;

@@ -367,8 +367,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a383cbbd2f6bb3a4088750c2441918f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 12
-  outlineRadius: 16
+  radius: 36
+  outlineRadius: 40
+  outlineDarkeningMultiplier: 0.2
 --- !u!4 &1842062706
 Transform:
   m_ObjectHideFlags: 0

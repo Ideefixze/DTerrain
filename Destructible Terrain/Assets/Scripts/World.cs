@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DTerrain
 {
     /// <summary>
-    /// World is a composite of chunks. Inits them and redirects all operations to the chunks.
+    /// World is a composite of chunks. Inits them and redirects all operations to the chunks. Operates on a original texture coordinates to find a chunk.
     /// </summary>
     public class World : MonoBehaviour
     {
@@ -118,7 +118,7 @@ namespace DTerrain
         }
 
         /// <summary>
-        /// DestroyTerrain used to delete a single range.
+        /// DestroyTerrain is used to delete a single range.
         /// </summary>
         /// <param name="x">X coord</param>
         /// <param name="y">Y coord</param>
@@ -153,12 +153,17 @@ namespace DTerrain
                     break;
                 }
             }
-            
 
             return false;
 
         }
 
+        /// <summary>
+        /// Calls an DestroyTerrain for a chunk
+        /// </summary>
+        /// <param name="x">X coord</param>
+        /// <param name="y">Y coord</param>
+        /// <returns>True if any changes were made</returns>
         public bool DestroyTerrain(int x, int y)
         {
             int xchunk = (x+chunkSizeX/2)/chunkSizeX;
@@ -193,6 +198,12 @@ namespace DTerrain
         
         }
 
+        /// <summary>
+        /// Checks if there is an terrain or air in given pixel
+        /// </summary>
+        /// <param name="x">X coord</param>
+        /// <param name="y">Y coord</param>
+        /// <returns>True - filled, False - not filled</returns>
         public bool FilledAt(int x, int y)
         {
             int xchunk = (x+chunkSizeX/2)/chunkSizeX;
@@ -207,18 +218,13 @@ namespace DTerrain
             return false;
         }
 
+
+        /// <param name="x">X position at Texture2D</param>
+        /// <param name="y">Y position at Texture2D</param>
+        /// <returns>Color at (x,y) for an original texture</returns>
         public Color ColorAt(int x, int y)
         {
-            int xchunk = (x + chunkSizeX / 2) / chunkSizeX;
-            int ychunk = (y + chunkSizeY / 2) / chunkSizeY;
-            int posInChunkX = x - xchunk * chunkSizeX + chunkSizeX / 2;
-            int posInChunkY = y - ychunk * chunkSizeY + chunkSizeY / 2;
-            int cid = xchunk * chunksY + ychunk;
-            if (cid >= 0 && cid < chunks.Count)
-            {
-                return chunks[cid].ColorAt(posInChunkX, posInChunkY);
-            }
-            return Color.black;
+            return originalTexture.GetPixel(x, y);
         }
 
 

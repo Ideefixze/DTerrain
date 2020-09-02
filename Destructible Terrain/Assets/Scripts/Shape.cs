@@ -10,8 +10,8 @@ namespace DTerrain
     /// </summary>
     public class Shape
     {
-        int _width;
-        int _height;
+        private int _width;
+        private int _height;
 
         public List<Range> ranges;
         public Color outlineColor=Color.black;

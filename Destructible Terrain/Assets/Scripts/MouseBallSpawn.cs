@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace DTerrain
 {
+    /// <summary>
+    /// Example script: Spawining Unity gameobject with collider to show that DTerrain works with Unity Colliders 2D.
+    /// </summary>
     public class MouseBallSpawn : MonoBehaviour
     {
         [SerializeField]

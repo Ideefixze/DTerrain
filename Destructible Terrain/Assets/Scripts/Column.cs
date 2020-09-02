@@ -6,46 +6,14 @@ using UnityEngine;
 
 namespace DTerrain
 {
-    //Range represents a range [min;max]
-    public class Range
-    {
-        public int min;
-        public int max;
-
-        public bool isWithin(int point)
-        {
-            return point <= max && point >= min;
-        }
-
-        public Range(int a, int b)
-        {
-            min = a;
-            max = b;
-        }
-
-        public int Length()
-        {
-            int len = max - min;
-            if (len <= 0) return 0;
-            else return len;
-        }
-
-        public void PrintRange()
-        {
-            Debug.Log("Range: [ " + min + " , " + max + " ]");
-        }
-
-        public static Range operator+(Range r, int a)
-        {
-            return new Range(r.min+a,r.max+a);
-        }
-
-        
-    }
-
-    //Column represents a list of ranges: [ [min1;max1], [min2;max2] ... ].
+    /// <summary>
+    /// Column represents a list of ranges: [ [min1;max1], [min2;max2] ... ].
+    /// </summary>
     public class Column
     {
+        /// <summary>
+        /// X pos of an column. Unused, but can be useful in future.
+        /// </summary>
         public int x;
         public List<Range> ranges;
         public Column(int x) { this.x = x; ranges = new List<Range>(); }
@@ -71,6 +39,9 @@ namespace DTerrain
             return false;
         }
 
+
+        /// <param name="point">Point of intrest</param>
+        /// <returns>Range that contains a point or null if none has it</returns>
         public Range Within(int point)
         {
             foreach (Range r in ranges)
@@ -88,8 +59,11 @@ namespace DTerrain
             }
         }
 
-        //Deletes a single pixel/position from the column.
-        //Splits the range into two if needed.
+
+        /// <summary>
+        /// Deletes a single pixel/position from the column. Splits range into two if needed.
+        /// </summary>
+        /// <param name="pos">Position in column</param>
         public void SingleDelRange(int pos)
         {
             Range r = Within(pos);
@@ -103,8 +77,11 @@ namespace DTerrain
             }
         }
 
-        //Deletes a range from column.
-        //May be buggy for len=1 ranges.
+        /// <summary>
+        /// Deletes a range from column. May be buggy for len=1 ranges.
+        /// </summary>
+        /// <param name="delr">Range to delete a column with</param>
+        /// <returns>True if any changes were made</returns>
         public bool DelRange(Range delr)
         {
             int a = delr.min;

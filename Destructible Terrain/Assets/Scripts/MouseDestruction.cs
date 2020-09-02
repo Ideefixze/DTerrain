@@ -9,8 +9,13 @@ namespace DTerrain
         [Tooltip("Radius of circle that will destroy world on click.")]
         [SerializeField]
         private int radius = 8;
+        [Tooltip("Radius of a ring that will create outline on click.")]
         [SerializeField]
         private int outlineRadius = 12;
+        [Tooltip("Outline is a color of an original texture multiplied by this value")]
+        [SerializeField]
+        [Range(0f,1f)]
+        private float outlineDarkeningMultiplier = 0.25f;
 
         private World world;
 
@@ -18,7 +23,7 @@ namespace DTerrain
         // Start is called before the first frame update
         void Start()
         {
-            destructor = new WormsDestructor(radius,outlineRadius);
+            destructor = new WormsDestructor(radius,outlineRadius, outlineDarkeningMultiplier);
             world = FindObjectOfType<World>();
         }
 

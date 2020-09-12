@@ -20,10 +20,11 @@ Each **Chunk** has their sub-texture made from original Texture. I found out tha
 Whenever a change is made (destruction) each **Chunk** recalculates sub-textures based on their **Columns** and recreates BoxColliders2D using Quadtree to fit new terrain.
 
 ### Would it work in realtime game?
-Yes. Example scene rarely goes below ~80 FPS on my machine and it contains a medium-sized destruction every frame.
+*Yes. Example scene rarely goes below ~80 FPS on my machine and it contains a medium-sized destruction every frame.*
 ### How I can make it work even faster?
 *Increase number of chunks or reduce number of operations done on world per frame.*
 *Reduce unnecessary per frame changes to the terrain as it makes chunk to recalculate it's colliders.*
+*Recalculating colliders takes about 90% of all computation for DTerrain, keep that in mind.*
 ### I can't access any of the components from this package.
 *Make sure you add ```using DTerrain;``` at the begining of you scripts.*
 ### Will it work with my Unity version?

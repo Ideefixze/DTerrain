@@ -37,10 +37,6 @@ namespace DTerrain
             Camera.main.transform.position = new Vector3((float)originalTexture.width/PPU/2.0f, (float)originalTexture.height/PPU/2.0f, -10.0f);
         }
 
-        void Update()
-        {
-        }
-
         /// <summary>
         /// Inits all chunks. Splits textures for them and makes sure they get DestructibleTerrainChunk.
         /// </summary>
@@ -221,16 +217,23 @@ namespace DTerrain
 
         /// <param name="x">X position at Texture2D</param>
         /// <param name="y">Y position at Texture2D</param>
-        /// <returns>Color at (x,y) for an original texture</returns>
+        /// <returns>Color at (x,y) for an original texture.</returns>
         public Color ColorAt(int x, int y)
         {
-            return originalTexture.GetPixel(x, y);
+            int xchunk = (x + chunkSizeX / 2) / chunkSizeX;
+            int ychunk = (y + chunkSizeY / 2) / chunkSizeY;
+            int posInChunkX = x - xchunk * chunkSizeX + chunkSizeX / 2;
+            int posInChunkY = y - ychunk * chunkSizeY + chunkSizeY / 2;
+            int cid = xchunk * chunksY + ychunk;
+            if (cid >= 0 && cid < chunks.Count)
+            {
+                return chunks[cid].ColorAt(posInChunkX, posInChunkY);
+            }
+            return new Color(0,0,0,0);
         }
-
 
         /// <summary>
         /// Given a position on the scene, returns a position in the World. World = this world class, not a position in a Unity World.
-        /// Think of it as position on texture (pixels)
         /// </summary>
         /// <param name="scenePos">Position in scene. Remember to make World offset (0,0).</param>
         /// <returns></returns>

@@ -76,8 +76,6 @@ namespace DTerrain
 
             float time2 = Time.realtimeSinceStartup;
 
-            //For testing. How long it takes to make a colliders.
-            //Debug.Log("#Created Collider in: " + (time2 - time1));
         }
       
 

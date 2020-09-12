@@ -34,43 +34,26 @@ namespace DTerrain
             GetComponent<AutomaticMeshCollider>()?.MakeColliders(columns, 0, 0, terrainTexture.width, terrainTexture.height);
         }
 
-        void Update()
-        {
-            if (updateTerrainOnNextFrame)
-            {
-                UpdateTexture();
-                GetComponent<AutomaticMeshCollider>()?.MakeColliders(columns, 0, 0, terrainTexture.width, terrainTexture.height);
-
-                updateTerrainOnNextFrame = false;
-            }
-        }
-
-        // Start is called before the first frame update
-        public Texture2D GetTerrainTexture()
-        {
-            return terrainTexture;
-        }
-        public Texture2D GetOutlineTexture()
-        {
-            return outlineTexture;
-        }
-
-        /*
-         * Prepares textures used in process.
-         * finalTexture = terrainTexture(copy of an orginal Texture, that is being changed) + outlineTexture(black outline on destruction)
-         */
+        /// <summary>
+        /// Initializes a single chunk.
+        /// </summary>
         public void InitChunk()
         {
+            //Prepares a list of columns
             columns = new List<Column>();
 
+            //Sets loaded texture from sprite
             Sprite loadedSprite = GetComponent<SpriteRenderer>().sprite;
             loadedTexture = loadedSprite.texture;
 
+            //Creates a terrain texture (the one that will be destroyed, so original texture remains unchanged)
+            //We might use original texture for something else
             terrainTexture = new Texture2D(loadedTexture.width, loadedTexture.height);
             terrainTexture.filterMode = filterMode;
             terrainTexture.SetPixels(0, 0, terrainTexture.width, terrainTexture.height, loadedTexture.GetPixels(0, 0, loadedTexture.width, loadedTexture.height));
             terrainTexture.Apply();
 
+            //Create an outline layer for a destroyed terrain
             outlineTexture = new Texture2D(loadedTexture.width, loadedTexture.height);
             outlineTexture.filterMode = filterMode;
             Color[] clrs = new Color[(loadedTexture.width * loadedTexture.height)];
@@ -78,6 +61,7 @@ namespace DTerrain
 
             outlineTexture.SetPixels(clrs);
 
+            //Final texture: will be combination of an outline+terrain textures and is displayed with SpriteRenderer
             finalTexture = new Texture2D(loadedTexture.width, loadedTexture.height);
             finalTexture.filterMode = filterMode;
 
@@ -89,8 +73,21 @@ namespace DTerrain
 
             updateTerrainOnNextFrame = true;
 
-
         }
+
+        void Update()
+        {
+            if (updateTerrainOnNextFrame)
+            {
+                UpdateTexture();
+                GetComponent<AutomaticMeshCollider>()?.MakeColliders(columns, 0, 0, terrainTexture.width, terrainTexture.height);
+
+                updateTerrainOnNextFrame = false;
+            }
+        }
+
+
+
 
         void UpdateWorldColumns()
         {
@@ -102,134 +99,10 @@ namespace DTerrain
 
         }
 
-
-        public Color ColorAt(int x, int y)
-        {
-            return loadedTexture.GetPixel(x, y);
-        }
-
-        /// <summary>
-        /// Destroys a single pixel on the bitmap. Warning: use large power. Lower values are not supported and may cause weird looking texture. You can expand on this idea.
-        /// </summary>
-        /// <param name="x">X coord.</param>
-        /// <param name="y">Y coord.</param>
-        /// <returns></returns>
-        public bool DestroyTexture(int x, int y)
-        { 
-
-            terrainTexture.SetPixel(x, y, Color.clear);
-
-            outlineTexture.SetPixel(x, y, Color.clear);
-
-            return true;
-        }
-
-        public bool DestroyTexture(int x, int y, int w, int h)
-        {
-            Color[] c = new Color[w*h];
-            for (int i = 0; i < w * h; i++)
-                c[i] = Color.clear;
-
-            terrainTexture.SetPixels(x, y, w,h, c);
-
-            outlineTexture.SetPixels(x, y, w,h, c);
-
-            return true;
-        }
-
-        public bool DestroyTerrain(int x, int y)
-        {
-            if (x >= 0 && x < terrainTexture.width && y >= 0 && y < terrainTexture.height)
-            {
-                DestroyTexture(x,y);
-
-                columns[x].SingleDelRange(y);
-
-                updateTerrainOnNextFrame = true;
-
-                return true;
-            }
-            return false;
-        }
-        public bool DestroyTerrain(Vector2Int pos)
-        {
-            return DestroyTerrain(pos.x, pos.y);
-        }
-
-        public void MakeOutline(int x, int y, Color outlineCol)
-        {
-            if (x >= 0 && x < terrainTexture.width && y >= 0 && y < terrainTexture.height)
-            {
-                if (terrainTexture.GetPixel(x, y).a > alphaTreshold)
-                {
-                    outlineTexture.SetPixel(x, y, outlineCol);
-                    updateTerrainOnNextFrame = true;
-                }
-            }
-        }
-
-        public void MakeOutline(Vector2Int pos, Color outlineCol)
-        {
-            MakeOutline(pos.x, pos.y, outlineCol);
-        }
-
-        /// <summary>
-        /// Cuts a shape in the world. Currently unsupported: World uses DestroyTerrainWithRange to cut with shape.
-        /// </summary>
-        /// <param name="x">Pos x of shape in world.</param>
-        /// <param name="y">Pos y of shape in world.</param>
-        /// <param name="s">Shape.</param>
-        /// <param name="power">Power of destruction.</param>
-        public void DestroyTerrain(int x, int y, Shape s)
-        {
-            int k = 0;
-            bool changed = false;
-            foreach (Range r in s.ranges)
-            {
-                MakeOutline(x + k, y + r.min, Color.black);
-                for (int i = r.min + 1; i < r.max - 1; i++)
-                {
-                    if (k > 0 && k < s.ranges.Count - 1)
-                        changed = DestroyTexture(x + k, y + i);
-                    else
-                        MakeOutline(x + k, y + i, Color.black);
-
-                }
-                MakeOutline(x + k, y + r.max - 1, Color.black);
-                k++;
-            }
-        }
-
-        public void DestroyTerrain(Vector2Int pos, Shape s)
-        {
-            DestroyTerrain(pos.x, pos.y, s);
-        }
-
-        /// <summary>
-        /// Destroys a terrain using a range at given coordinates.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="r"></param>
-        /// <returns></returns>
-        public bool DestroyTerrain(int x, int y, Range r)
-        {
-            int w = terrainTexture.width;
-            int h = terrainTexture.height;
-            if (x < 0 && x >= w) return false;
-
-            int a = Mathf.Max(0, r.min+y);
-            int b = Mathf.Min(h, r.max+y+1);
-
-            if(b>a)
-                DestroyTexture(x, a, 1, b - a);
-
-            return columns[x].DelRange(new Range(r.min + y, r.max + y));
-        }
-
-        /// <summary>
-        /// Recreates final texture that consists of initial texture (that was possibly changed) and outline.
-        /// </summary>
+        /*
+         * Prepares textures used in process.
+         * finalTexture = terrainTexture(copy of an orginal Texture, that is being changed) + outlineTexture(black outline on destruction)
+         */
         void UpdateTexture()
         {
             outlineTexture.Apply();
@@ -264,7 +137,7 @@ namespace DTerrain
         }
 
         /// <summary>
-        /// Using terrainTexture creates a list of ranges (tiles that are egible for collider).
+        /// Using terrainTexture creates a list of ranges (tiles that are egible for a collider).
         /// </summary>
         void PrepareColumns()
         {
@@ -293,6 +166,20 @@ namespace DTerrain
             }
         }
 
+        public Texture2D GetTerrainTexture()
+        {
+            return terrainTexture;
+        }
+        public Texture2D GetOutlineTexture()
+        {
+            return outlineTexture;
+        }
+
+        /* 
+         * Methods below are single-pixel methods (for destruction etc.)
+         * rather than chunk oriented.
+         */
+
         //Checks if pos in chunk is filled
         public bool FilledAt(int x, int y)
         {
@@ -305,6 +192,98 @@ namespace DTerrain
         public bool FilledAt(Vector2Int pos)
         {
             return FilledAt(pos.x, pos.y);
+        }
+
+        public Color ColorAt(int x, int y)
+        {
+            return loadedTexture.GetPixel(x, y);
+        }
+
+        /// <summary>
+        /// Destroys a single pixel on the bitmap. Warning: use large power. Lower values are not supported and may cause weird looking texture. You can expand on this idea.
+        /// </summary>
+        /// <param name="x">X coord.</param>
+        /// <param name="y">Y coord.</param>
+        /// <returns></returns>
+        public bool DestroyTexture(int x, int y)
+        {
+
+            terrainTexture.SetPixel(x, y, Color.clear);
+
+            outlineTexture.SetPixel(x, y, Color.clear);
+
+            return true;
+        }
+
+        public bool DestroyTexture(int x, int y, int w, int h)
+        {
+            Color[] c = new Color[w * h];
+            for (int i = 0; i < w * h; i++)
+                c[i] = Color.clear;
+
+            terrainTexture.SetPixels(x, y, w, h, c);
+            outlineTexture.SetPixels(x, y, w, h, c);
+
+            return true;
+        }
+
+        public bool DestroyTerrain(int x, int y)
+        {
+            if (x >= 0 && x < terrainTexture.width && y >= 0 && y < terrainTexture.height)
+            {
+                DestroyTexture(x, y);
+
+                columns[x].SingleDelRange(y);
+
+                updateTerrainOnNextFrame = true;
+
+                return true;
+            }
+            return false;
+        }
+        public bool DestroyTerrain(Vector2Int pos)
+        {
+            return DestroyTerrain(pos.x, pos.y);
+        }
+
+        public void MakeOutline(int x, int y, Color outlineCol)
+        {
+            if (x >= 0 && x < terrainTexture.width && y >= 0 && y < terrainTexture.height)
+            {
+                if (terrainTexture.GetPixel(x, y).a > alphaTreshold)
+                {
+                    outlineTexture.SetPixel(x, y, outlineCol);
+                    updateTerrainOnNextFrame = true;
+                }
+            }
+        }
+
+        public void MakeOutline(Vector2Int pos, Color outlineCol)
+        {
+            MakeOutline(pos.x, pos.y, outlineCol);
+        }
+
+
+        /// <summary>
+        /// Destroys a terrain using a range at given coordinates.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        public bool DestroyTerrain(int x, int y, Range r)
+        {
+            int w = terrainTexture.width;
+            int h = terrainTexture.height;
+            if (x < 0 && x >= w) return false;
+
+            int a = Mathf.Max(0, r.min + y);
+            int b = Mathf.Min(h, r.max + y + 1);
+
+            if (b > a)
+                DestroyTexture(x, a, 1, b - a);
+
+            return columns[x].DelRange(new Range(r.min + y, r.max + y));
         }
     }
 }

@@ -13,7 +13,7 @@ Then I make a list of ranges called **Column**.
 I fill those ranges using image (if color.alpha>threshold I fill it and use range to remember it effectively).
 Now I have a list of **Columns** that make a single **Chunk**. **World** is made of chunks and when any changes are made to the **World** - it changes the certain chunk. 
 
-There are many ways you can handle destruction now: if I have shape (list of **Columns**) I can manually remove each pixel (slower, but easier and less buggy), or use **ranges** of this shape.
+There are many ways you can handle destruction now: if I have shape (list of **Columns**) I can manually remove each pixel, or use **ranges** of this shape to delete effectively bigger areas of terrain.
 
 Each **Chunk** has their sub-texture made from original Texture. I found out that changing a few smaller Textures is much, much faster than changing one big texture. 
 

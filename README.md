@@ -1,7 +1,7 @@
 # DTerrain
 Destructible terrain in Unity
 
-Simple destructible terrain in Unity based on bitmaps and Quadtree. Pretty efficent and works with Unity Colliders. If you want to use it, clone this repository and see example scene.
+Simple destructible terrain in Unity based on bitmaps and Quadtree. Pretty efficent and works with Unity Colliders. Very reusable and customizable for your own needs. This beginner friendly tool will take your game to the next level. If you want to use it, clone this repository and see example scene.
 
 ![Demo](dterrainexample_new.gif)
 
@@ -30,7 +30,7 @@ Whenever a change is made (destruction) each **Chunk** recalculates sub-textures
 ### Will it work with my Unity version?
 *It should as code is universal and doesn't use version specific tweaks in Unity (only BoxColliders2D).*
 ### Can I use it for free?
-*Yes.* 
+*Yes. Now and forever. You don't have to credit me, but I'd really like to know if you built something meaningful with it. * 
 
 ## Special thanks:
 - **/u/idbrii** for pointing out a fix that nearly doubled the FPS.

@@ -30,7 +30,7 @@ Whenever a change is made (destruction) each **Chunk** recalculates sub-textures
 ### Will it work with my Unity version?
 *It should as code is universal and doesn't use version specific tweaks in Unity (only BoxColliders2D).*
 ### Can I use it for free?
-*Yes. Now and forever. You don't have to credit me, but I'd really like to know if you built something meaningful with it. * 
+*Yes. Now and forever. You don't have to credit me, but I'd really like to know if you built something meaningful with it.* 
 
 ## Special thanks:
 - **/u/idbrii** for pointing out a fix that nearly doubled the FPS.

@@ -31,10 +31,10 @@ namespace DTerrain
             //And outline shape as columns...
             outlineColumns=new List<Column>();
             int k = 0;
-            foreach (var range in outlineShape.ranges)
+            foreach (var range in outlineShape.Ranges)
             {
                 outlineColumns.Add(new Column(k));
-                outlineColumns[k].AddRange(new Range(range.min, range.max));
+                outlineColumns[k].AddRange(new Range(range.Min, range.Max));
                 k++;
             }
 
@@ -42,9 +42,9 @@ namespace DTerrain
             //"Cut" a circle in a bigger circle to create ring for an outline
             offset = outlineRadius - destructionRadius;
             k = 0;
-            for (int i = offset; k < destroyShape.ranges.Count; i++)
+            for (int i = offset; k < destroyShape.Ranges.Count; i++)
             {
-                outlineColumns[i].DelRange(destroyShape.ranges[k] + offset);
+                outlineColumns[i].DelRange(destroyShape.Ranges[k] + offset);
                 k++;
             }
         }
@@ -55,9 +55,9 @@ namespace DTerrain
             int k = 0;
             foreach (var c in outlineColumns)
             {
-                foreach (var r in c.ranges)
+                foreach (var r in c.Ranges)
                 {
-                    for (int i = r.min; i < r.max; i++)
+                    for (int i = r.Min; i < r.Max; i++)
                     {
                         Color col = w.ColorAt(x + k - offset, y + i - offset);
                         col.r = col.r * multiplier;

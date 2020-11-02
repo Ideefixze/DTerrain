@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chunksX: 32
   chunksY: 32
-  originalTexture: {fileID: 2800000, guid: 3126d95259a12d34baa6610242387a98, type: 3}
+  originalTexture: {fileID: 2800000, guid: b080b1d8fe8076f4c82b9217978c206f, type: 3}
   PPU: 32
   baseChunk: {fileID: 2008469412053859608, guid: 64aab6df6d9298849a7258cbbf8f696c,
     type: 3}
@@ -367,8 +367,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a383cbbd2f6bb3a4088750c2441918f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 18
-  outlineRadius: 24
+  radius: 12
+  outlineRadius: 16
   outlineDarkeningMultiplier: 0.35
 --- !u!4 &1842062706
 Transform:

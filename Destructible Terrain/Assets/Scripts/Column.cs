@@ -14,25 +14,25 @@ namespace DTerrain
         /// <summary>
         /// X pos of an column. Unused, but can be useful in future.
         /// </summary>
-        public int x;
-        public List<Range> ranges;
-        public Column(int x) { this.x = x; ranges = new List<Range>(); }
+        public int X;
+        public List<Range> Ranges;
+        public Column(int x) { this.X = x; Ranges = new List<Range>(); }
         public Range AddRange(int mini, int maxi)
         {
             Range r = new Range(mini, maxi);
-            ranges.Add(r);
+            Ranges.Add(r);
             return r;
         }
 
         public Range AddRange(Range r)
         {
-            ranges.Add(r);
+            Ranges.Add(r);
             return r;
         }
 
         public bool isWithin(int point)
         {
-            foreach (Range r in ranges)
+            foreach (Range r in Ranges)
             {
                 if (r.isWithin(point) == true) return true;
             }
@@ -44,21 +44,12 @@ namespace DTerrain
         /// <returns>Range that contains a point or null if none has it</returns>
         public Range Within(int point)
         {
-            foreach (Range r in ranges)
+            foreach (Range r in Ranges)
             {
                 if (r.isWithin(point) == true) return r;
             }
             return null;
         }
-
-        public void PrintColumn()
-        {
-            foreach (Range r in ranges)
-            {
-                r.PrintRange();
-            }
-        }
-
 
         /// <summary>
         /// Deletes a single pixel/position from the column. Splits range into two if needed.
@@ -69,11 +60,11 @@ namespace DTerrain
             Range r = Within(pos);
             if (r != null)
             {
-                Range r1 = new Range(r.min, pos - 1);
-                Range r2 = new Range(pos + 1, r.max);
+                Range r1 = new Range(r.Min, pos - 1);
+                Range r2 = new Range(pos + 1, r.Max);
                 if (r1.Length() > 0) AddRange(r1);
                 if (r2.Length() > 0) AddRange(r2);
-                ranges.Remove(r);
+                Ranges.Remove(r);
             }
         }
 
@@ -84,50 +75,50 @@ namespace DTerrain
         /// <returns>True if any changes were made</returns>
         public bool DelRange(Range delr)
         {
-            int a = delr.min;
-            int b = delr.max;
+            int a = delr.Min;
+            int b = delr.Max;
             bool changed = false;
-            for (int i = 0; i < ranges.Count; i++)
+            for (int i = 0; i < Ranges.Count; i++)
             {
-                if (ranges[i].min < a && ranges[i].max > b) ///0---a-----b----1
+                if (Ranges[i].Min < a && Ranges[i].Max > b) ///0---a-----b----1
                 {
                     changed = true;
                     if (Mathf.Abs(a - b) == 0)
                     {
-                        ranges.Add(new Range(ranges[i].min, a - 1));
-                        ranges.Add(new Range(b + 1, ranges[i].max));
-                        ranges.Remove(ranges[i]);
+                        Ranges.Add(new Range(Ranges[i].Min, a - 1));
+                        Ranges.Add(new Range(b + 1, Ranges[i].Max));
+                        Ranges.Remove(Ranges[i]);
                         break;
                     }
-                    ranges.Add(new Range(ranges[i].min, a));
-                    ranges.Add(new Range(b, ranges[i].max));
-                    ranges.Remove(ranges[i]);
+                    Ranges.Add(new Range(Ranges[i].Min, a));
+                    Ranges.Add(new Range(b, Ranges[i].Max));
+                    Ranges.Remove(Ranges[i]);
                     break;
                     
                 }
 
-                if (ranges[i].min >= a && ranges[i].max <= b) ///-------a-0---1--b
+                if (Ranges[i].Min >= a && Ranges[i].Max <= b) ///-------a-0---1--b
                 {
                     changed = true;
-                    ranges.Remove(ranges[i]);
+                    Ranges.Remove(Ranges[i]);
                     i--;
                     continue;
                 }
 
-                if (ranges[i].min < a && ranges[i].max <= b && ranges[i].max > a) ///-------0--a---1---b
+                if (Ranges[i].Min < a && Ranges[i].Max <= b && Ranges[i].Max > a) ///-------0--a---1---b
                 {
                     changed = true;
-                    ranges.Add(new Range(ranges[i].min, a));
-                    ranges.Remove(ranges[i]);
+                    Ranges.Add(new Range(Ranges[i].Min, a));
+                    Ranges.Remove(Ranges[i]);
                     i--;
                     continue;
                 }
 
-                if (ranges[i].min >= a && ranges[i].max > b && ranges[i].min < b) ///--a-0----b---1--
+                if (Ranges[i].Min >= a && Ranges[i].Max > b && Ranges[i].Min < b) ///--a-0----b---1--
                 {
                     changed = true;
-                    ranges.Add(new Range(b, ranges[i].max));
-                    ranges.Remove(ranges[i]);
+                    Ranges.Add(new Range(b, Ranges[i].Max));
+                    Ranges.Remove(Ranges[i]);
                     i--;
                     continue;
                 }

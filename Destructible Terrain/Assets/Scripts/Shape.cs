@@ -10,20 +10,18 @@ namespace DTerrain
     /// </summary>
     public class Shape
     {
-        private int _width;
-        private int _height;
 
-        public List<Range> ranges;
-        public Color outlineColor=Color.black;
+        public List<Range> Ranges;
+        public Color OutlineColor=Color.black;
 
-        public int width { get => _width; private set => _width = value; }
-        public int height { get => _height; private set => _height = value; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
 
         public Shape(int w, int h)
         {
-            width = w;
-            height = h;
-            ranges = new List<Range>();
+            Width = w;
+            Height = h;
+            Ranges = new List<Range>();
         }
 
         /// <summary>
@@ -67,7 +65,7 @@ namespace DTerrain
                 if (down)
                 {
                     Range range = new Range(min, max);
-                    s.ranges.Add(range);
+                    s.Ranges.Add(range);
                 }
 
             }

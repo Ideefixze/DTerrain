@@ -11,51 +11,43 @@ namespace DTerrain
     ///</summary>
     public class Range
     {
-        public int min;
-        public int max;
+        public int Min;
+        public int Max;
 
         public bool isWithin(int point)
         {
-            return point <= max && point >= min;
+            return point <= Max && point >= Min;
         }
 
         public Range(int a, int b)
         {
-            min = a;
-            max = b;
+            Min = a;
+            Max = b;
         }
 
         public Range(Range r)
         {
-            min = r.min;
-            max = r.max;
+            Min = r.Min;
+            Max = r.Max;
         }
 
 
         /// <returns>Absolute length of a range.</returns>
         public int Length()
         {
-            int len = Mathf.Abs(max - min);
+            int len = Mathf.Abs(Max - Min);
             if (len <= 0) return 0;
             else return len;
         }
 
-        /// <summary>
-        /// For debugging.
-        /// </summary>
-        public void PrintRange()
-        {
-            Debug.Log("Range: [ " + min + " , " + max + " ]");
-        }
-
         public static Range operator+(Range r, int a)
         {
-            return new Range(r.min+a,r.max+a);
+            return new Range(r.Min+a,r.Max+a);
         }
 
         public static Range operator -(Range r, int a)
         {
-            return new Range(r.min - a, r.max - a);
+            return new Range(r.Min - a, r.Max - a);
         }
 
     }

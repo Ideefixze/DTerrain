@@ -18,8 +18,6 @@ namespace DTerrain
 
         [SerializeField]
         private Texture2D originalTexture=null;
-        [Tooltip("PPU of the used texture.")]
-        public int PPU = 32;
 
         [SerializeField]
         [Tooltip("GameObject representing chunk that will be spawned.")]
@@ -28,8 +26,12 @@ namespace DTerrain
         private int chunkSizeX;
         private int chunkSizeY;
         
-        List<DestructibleTerrainChunk> chunks;
-    
+        private List<DestructibleTerrainChunk> chunks;
+
+
+        [Tooltip("PPU of the used texture.")]
+        public int PPU = 32;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -84,9 +86,9 @@ namespace DTerrain
         public void DestroyTerrain(int x, int y, Shape s)
         {
             int k = 0;
-            foreach (Range r in s.ranges)
+            foreach (Range r in s.Ranges)
             {
-                DestroyTerrain(x+k,y,r, s.height);
+                DestroyTerrain(x+k,y,r, s.Height);
                 k++;
             }
         }
@@ -105,10 +107,10 @@ namespace DTerrain
         public void MakeOutline(int x, int y, Shape s)
         {
             int k = 0;
-            foreach (Range r in s.ranges)
+            foreach (Range r in s.Ranges)
             {
-                for(int i = r.min;i<r.max;i++)
-                    MakeOutline(x+k,y+i,s.outlineColor);
+                for(int i = r.Min;i<r.Max;i++)
+                    MakeOutline(x+k,y+i,s.OutlineColor);
                 k++;
             }
         }
@@ -139,7 +141,7 @@ namespace DTerrain
                 if (cid >= 0 && cid < chunks.Count && k+ychunk<chunksY && (k-1)*chunkSizeY<=height)
                 {
                     if(chunks[cid].DestroyTerrain(posInChunkX, posInChunkY - k * chunkSizeY, r))
-                        chunks[cid].updateTerrainOnNextFrame = true;
+                        chunks[cid].UpdateTerrainOnNextFrame = true;
 
                     cid++;
                     k++;

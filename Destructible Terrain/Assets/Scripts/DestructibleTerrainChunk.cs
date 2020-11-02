@@ -7,7 +7,8 @@ namespace DTerrain
     [RequireComponent(typeof(SpriteRenderer))]
     public class DestructibleTerrainChunk : MonoBehaviour
     {
-        public bool updateTerrainOnNextFrame = false;
+        public bool UpdateTerrainOnNextFrame = false;
+
         [SerializeField]
         private FilterMode filterMode=FilterMode.Point;
 
@@ -20,13 +21,13 @@ namespace DTerrain
          * DTerrain uses a list of ranges (list of ranges) to determine which tile is occupied.
          * This makes game run faster than holding every pixel/tile as a separate object.
          * */
-        List<Column> columns;
+        private List<Column> columns;
 
-        Texture2D loadedTexture;    //Original texture loaded from spriteRenderer.
-        Texture2D terrainTexture;   //Texture ingame. This texture changes itself.
-        Texture2D outlineTexture;   //Black pixel outline around solid terrain.
-        Texture2D finalTexture;     //Final texture shown to the player.
-        Sprite sprite;              // Sprite used by SpriteRenderer.
+        private Texture2D loadedTexture;    //Original texture loaded from spriteRenderer.
+        private Texture2D terrainTexture;   //Texture ingame. This texture changes itself.
+        private Texture2D outlineTexture;   //Black pixel outline around solid terrain.
+        private Texture2D finalTexture;     //Final texture shown to the player.
+        private Sprite sprite;              // Sprite used by SpriteRenderer.
 
         void Start()
         {
@@ -71,18 +72,18 @@ namespace DTerrain
             sprite = Sprite.Create(finalTexture, new Rect(0, 0, finalTexture.width, finalTexture.height), new Vector2(0.5f, 0.5f), loadedSprite.pixelsPerUnit);
             GetComponent<SpriteRenderer>().sprite = sprite;
 
-            updateTerrainOnNextFrame = true;
+            UpdateTerrainOnNextFrame = true;
 
         }
 
         void Update()
         {
-            if (updateTerrainOnNextFrame)
+            if (UpdateTerrainOnNextFrame)
             {
                 UpdateTexture();
                 GetComponent<AutomaticMeshCollider>()?.MakeColliders(columns, 0, 0, terrainTexture.width, terrainTexture.height);
 
-                updateTerrainOnNextFrame = false;
+                UpdateTerrainOnNextFrame = false;
             }
         }
 
@@ -200,7 +201,7 @@ namespace DTerrain
         }
 
         /// <summary>
-        /// Destroys a single pixel on the bitmap. Warning: use large power. Lower values are not supported and may cause weird looking texture. You can expand on this idea.
+        /// Destroys a single pixel on the bitmap.
         /// </summary>
         /// <param name="x">X coord.</param>
         /// <param name="y">Y coord.</param>
@@ -235,7 +236,7 @@ namespace DTerrain
 
                 columns[x].SingleDelRange(y);
 
-                updateTerrainOnNextFrame = true;
+                UpdateTerrainOnNextFrame = true;
 
                 return true;
             }
@@ -253,7 +254,7 @@ namespace DTerrain
                 if (terrainTexture.GetPixel(x, y).a > alphaTreshold)
                 {
                     outlineTexture.SetPixel(x, y, outlineCol);
-                    updateTerrainOnNextFrame = true;
+                    UpdateTerrainOnNextFrame = true;
                 }
             }
         }
@@ -277,13 +278,13 @@ namespace DTerrain
             int h = terrainTexture.height;
             if (x < 0 && x >= w) return false;
 
-            int a = Mathf.Max(0, r.min + y);
-            int b = Mathf.Min(h, r.max + y + 1);
+            int a = Mathf.Max(0, r.Min + y);
+            int b = Mathf.Min(h, r.Max + y + 1);
 
             if (b > a)
                 DestroyTexture(x, a, 1, b - a);
 
-            return columns[x].DelRange(new Range(r.min + y, r.max + y));
+            return columns[x].DelRange(new Range(r.Min + y, r.Max + y));
         }
     }
 }

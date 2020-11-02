@@ -1,10 +1,10 @@
 # DTerrain
 Destructible terrain in Unity
 
-Simple destructible terrain in Unity based on bitmaps and Quadtree. Pretty efficent and works with Unity Colliders. If you want to use it, clone this repository and see example scene.
+Simple destructible terrain in Unity based on bitmaps and Quadtree. Pretty efficent and works with Unity Colliders. Very reusable and customizable for your own needs. This beginner friendly tool will take your game to the next level. If you want to use it, clone this repository and see example scene.
 
-![Demo](dterraingif1.gif)
-![Demo](gif.gif)
+![Demo](dterrainexample_new.gif)
+
 
 ## FAQ
 ### How it works?
@@ -13,7 +13,7 @@ Then I make a list of ranges called **Column**.
 I fill those ranges using image (if color.alpha>threshold I fill it and use range to remember it effectively).
 Now I have a list of **Columns** that make a single **Chunk**. **World** is made of chunks and when any changes are made to the **World** - it changes the certain chunk. 
 
-There are many ways you can handle destruction now: if I have shape (list of **Columns**) I can manually remove each pixel (slower, but easier and less buggy), or use **ranges** of this shape.
+There are many ways you can handle destruction now: if I have shape (list of **Columns**) I can manually remove each pixel, or use **ranges** of this shape to delete effectively bigger areas of terrain.
 
 Each **Chunk** has their sub-texture made from original Texture. I found out that changing a few smaller Textures is much, much faster than changing one big texture. 
 
@@ -30,7 +30,7 @@ Whenever a change is made (destruction) each **Chunk** recalculates sub-textures
 ### Will it work with my Unity version?
 *It should as code is universal and doesn't use version specific tweaks in Unity (only BoxColliders2D).*
 ### Can I use it for free?
-*Yes.* 
+*Yes. Now and forever. You don't have to credit me, but I'd really like to know if you built something meaningful with it.* 
 
 ## Special thanks:
 - **/u/idbrii** for pointing out a fix that nearly doubled the FPS.

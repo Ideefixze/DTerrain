@@ -93,6 +93,12 @@ namespace DTerrain
             }
         }
 
+
+        /// <summary>
+        /// Deletes terrain using each range in the shape.
+        /// </summary>
+        /// <param name="v">Position</param>
+        /// <param name="s">Shape to delete terrain with</param>
         public void DestroyTerrain(Vector2Int v, Shape s)
         {
             DestroyTerrain(v.x, v.y, s);
@@ -157,7 +163,7 @@ namespace DTerrain
         }
 
         /// <summary>
-        /// Calls an DestroyTerrain for a chunk
+        /// Calls an DestroyTerrain for a chunk for a single pixel
         /// </summary>
         /// <param name="x">X coord</param>
         /// <param name="y">Y coord</param>
@@ -176,12 +182,22 @@ namespace DTerrain
             return false;
         }
 
-
+        /// <summary>
+        /// Calls an DestroyTerrain for a chunk for a single pixel
+        /// </summary>
+        /// <param name="v">Position</param>
+        /// <returns>True if any changes were made</returns>
         public bool DestroyTerrain(Vector2Int v)
         {
             return DestroyTerrain(v.x, v.y);
         }
 
+        /// <summary>
+        /// Creates a single pixel colored outline
+        /// </summary>
+        /// <param name="x">X coord</param>
+        /// <param name="y">Y coord</param>
+        /// <param name="outlineCol">Color</param>
         public void MakeOutline(int x, int y, Color outlineCol)
         {
             int xchunk = (x+chunkSizeX/2)/chunkSizeX;

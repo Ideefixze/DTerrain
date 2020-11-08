@@ -201,12 +201,12 @@ namespace DTerrain
         }
 
         /// <summary>
-        /// Destroys a single pixel on the bitmap.
+        /// Clears a single pixel on the bitmap.
         /// </summary>
         /// <param name="x">X coord.</param>
         /// <param name="y">Y coord.</param>
         /// <returns></returns>
-        public bool DestroyTexture(int x, int y)
+        public bool ClearTexture(int x, int y)
         {
 
             terrainTexture.SetPixel(x, y, Color.clear);
@@ -216,7 +216,14 @@ namespace DTerrain
             return true;
         }
 
-        public bool DestroyTexture(int x, int y, int w, int h)
+        /// <summary>
+        /// Destroys a rectangle on the bitmap. Same as DestroyTexture but does an operation on a rectangle.
+        /// </summary>
+        /// <param name="x">X coord.</param>
+        /// <param name="y">Y coord.</param>
+        /// <returns></returns>
+
+        public bool ClearTexture(int x, int y, int w, int h)
         {
             Color[] c = new Color[w * h];
             for (int i = 0; i < w * h; i++)
@@ -228,11 +235,17 @@ namespace DTerrain
             return true;
         }
 
+        /// <summary>
+        /// Destroys Terrain and also clears up a corresponding texture.
+        /// </summary>
+        /// <param name="x">X</param>
+        /// <param name="y">Y</param>
+        /// <returns>True if changes were made.</returns>
         public bool DestroyTerrain(int x, int y)
         {
             if (x >= 0 && x < terrainTexture.width && y >= 0 && y < terrainTexture.height)
             {
-                DestroyTexture(x, y);
+                ClearTexture(x, y);
 
                 columns[x].SingleDelRange(y);
 
@@ -242,11 +255,24 @@ namespace DTerrain
             }
             return false;
         }
+
+        /// <summary>
+        /// Destroys Terrain and also clears up a corresponding texture.
+        /// </summary>
+        /// <param name="pos">Position</param>
+        /// <returns>True if changes were made.</returns>
         public bool DestroyTerrain(Vector2Int pos)
         {
             return DestroyTerrain(pos.x, pos.y);
         }
 
+
+        /// <summary>
+        /// Creates a single-pixel outline at given coordinate.
+        /// </summary>
+        /// <param name="x">X</param>
+        /// <param name="y">Y</param>
+        /// <param name="outlineCol">Outline color</param>
         public void MakeOutline(int x, int y, Color outlineCol)
         {
             if (x >= 0 && x < terrainTexture.width && y >= 0 && y < terrainTexture.height)
@@ -259,6 +285,11 @@ namespace DTerrain
             }
         }
 
+        /// <summary>
+        /// Creates a single-pixel outline at given coordinate.
+        /// </summary>
+        /// <param name="pos">Position</param>
+        /// <param name="outlineCol">Outline color</param>
         public void MakeOutline(Vector2Int pos, Color outlineCol)
         {
             MakeOutline(pos.x, pos.y, outlineCol);
@@ -268,10 +299,10 @@ namespace DTerrain
         /// <summary>
         /// Destroys a terrain using a range at given coordinates.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="r"></param>
-        /// <returns></returns>
+        /// <param name="x">X</param>
+        /// <param name="y">Y</param>
+        /// <param name="r">Range</param>
+        /// <returns>True if changes were made</returns>
         public bool DestroyTerrain(int x, int y, Range r)
         {
             int w = terrainTexture.width;
@@ -282,7 +313,7 @@ namespace DTerrain
             int b = Mathf.Min(h, r.Max + y + 1);
 
             if (b > a)
-                DestroyTexture(x, a, 1, b - a);
+                ClearTexture(x, a, 1, b - a);
 
             return columns[x].DelRange(new Range(r.Min + y, r.Max + y));
         }

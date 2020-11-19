@@ -154,10 +154,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chunksX: 32
   chunksY: 32
-  originalTexture: {fileID: 2800000, guid: b080b1d8fe8076f4c82b9217978c206f, type: 3}
-  PPU: 32
+  originalTexture: {fileID: 2800000, guid: 3126d95259a12d34baa6610242387a98, type: 3}
   baseChunk: {fileID: 2008469412053859608, guid: 64aab6df6d9298849a7258cbbf8f696c,
     type: 3}
+  PPU: 32
 --- !u!4 &418315283
 Transform:
   m_ObjectHideFlags: 0

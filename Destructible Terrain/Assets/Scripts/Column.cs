@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace DTerrain
@@ -94,7 +91,7 @@ namespace DTerrain
                     Ranges.Add(new Range(b, Ranges[i].Max));
                     Ranges.Remove(Ranges[i]);
                     break;
-                    
+
                 }
 
                 if (Ranges[i].Min >= a && Ranges[i].Max <= b) ///-------a-0---1--b

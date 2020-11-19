@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace DTerrain
@@ -10,11 +9,11 @@ namespace DTerrain
         public bool UpdateTerrainOnNextFrame = false;
 
         [SerializeField]
-        private FilterMode filterMode=FilterMode.Point;
+        private FilterMode filterMode = FilterMode.Point;
 
         [SerializeField]
         [Range(0f, 1f)]
-        private float alphaTreshold=0.05f;
+        private float alphaTreshold = 0.05f;
 
 
         /*
@@ -29,7 +28,7 @@ namespace DTerrain
         private Texture2D finalTexture;     //Final texture shown to the player.
         private Sprite sprite;              // Sprite used by SpriteRenderer.
 
-        void Start()
+        public void Start()
         {
             InitChunk();
             GetComponent<AutomaticMeshCollider>()?.MakeColliders(columns, 0, 0, terrainTexture.width, terrainTexture.height);
@@ -121,20 +120,6 @@ namespace DTerrain
 
             finalTexture.SetPixels(clrs);
             finalTexture.Apply();
-        }
-
-        //Unused, old method.
-        void UpdateOutline()
-        {
-            //Create new texture and make it transparent.
-            outlineTexture = new Texture2D(loadedTexture.width, loadedTexture.height);
-            outlineTexture.filterMode = FilterMode.Point;
-            Color[] clrs = new Color[(loadedTexture.width * loadedTexture.height)];
-            for (int i = 0; i < (loadedTexture.width * loadedTexture.height); i++) clrs[i] = Color.clear;
-
-            outlineTexture.SetPixels(clrs);
-
-            outlineTexture.Apply();
         }
 
         /// <summary>
@@ -266,6 +251,28 @@ namespace DTerrain
             return DestroyTerrain(pos.x, pos.y);
         }
 
+        /// <summary>
+        /// Destroys a terrain using a range at given coordinates.
+        /// </summary>
+        /// <param name="x">X</param>
+        /// <param name="y">Y</param>
+        /// <param name="r">Range</param>
+        /// <returns>True if changes were made</returns>
+        public bool DestroyTerrain(int x, int y, Range r)
+        {
+            int w = terrainTexture.width;
+            int h = terrainTexture.height;
+            if (x < 0 && x >= w) return false;
+
+            int a = Mathf.Max(0, r.Min + y);
+            int b = Mathf.Min(h, r.Max + y + 1);
+
+            if (b > a)
+                ClearTexture(x, a, 1, b - a);
+
+            return columns[x].DelRange(new Range(r.Min + y, r.Max + y));
+        }
+
 
         /// <summary>
         /// Creates a single-pixel outline at given coordinate.
@@ -296,26 +303,6 @@ namespace DTerrain
         }
 
 
-        /// <summary>
-        /// Destroys a terrain using a range at given coordinates.
-        /// </summary>
-        /// <param name="x">X</param>
-        /// <param name="y">Y</param>
-        /// <param name="r">Range</param>
-        /// <returns>True if changes were made</returns>
-        public bool DestroyTerrain(int x, int y, Range r)
-        {
-            int w = terrainTexture.width;
-            int h = terrainTexture.height;
-            if (x < 0 && x >= w) return false;
 
-            int a = Mathf.Max(0, r.Min + y);
-            int b = Mathf.Min(h, r.Max + y + 1);
-
-            if (b > a)
-                ClearTexture(x, a, 1, b - a);
-
-            return columns[x].DelRange(new Range(r.Min + y, r.Max + y));
-        }
     }
 }

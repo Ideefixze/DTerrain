@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 namespace DTerrain
 {
@@ -46,13 +44,13 @@ namespace DTerrain
 
             //For each Rect found from Columns (Quadtree in PrepareMesh)...
             foreach (Rect r in rects)
-            { 
+            {
                 //Newly created collider will have an offset equeal to that.
                 Vector2 rColliderOffset = new Vector2(-sizeX / PPU / 2f + r.x + r.size.x / 2, -sizeY / PPU / 2f + r.y + r.size.y / 2f);
-                
+
                 //Find already existing BoxCollider2D that would fit newly created BoxCollider2D.
                 BoxCollider2D boxC = colls.Find(coll => coll.offset == rColliderOffset && coll.size == r.size);
-                if(!boxC)
+                if (!boxC)
                 {
                     //Not found? Create new one.
                     BoxCollider2D b = gameObject.AddComponent<BoxCollider2D>();
@@ -77,14 +75,14 @@ namespace DTerrain
             float time2 = Time.realtimeSinceStartup;
 
         }
-      
+
 
         //Simple quadtree algortihm
         public void PrepareMesh(List<Column> chunk, int x, int y, int sizeX, int sizeY)
         {
             bool hasAnyAir = false;
             bool hasAnyGround = false;
-            
+
             for (int i = x; i < x + sizeX; i++)
             {
                 for (int j = y; j < y + sizeY; j++)

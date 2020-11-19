@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DTerrain
 {
@@ -10,7 +8,7 @@ namespace DTerrain
     public class MouseBallSpawn : MonoBehaviour
     {
         [SerializeField]
-        private GameObject ball=null;
+        private GameObject ball = null;
 
         void Update()
         {

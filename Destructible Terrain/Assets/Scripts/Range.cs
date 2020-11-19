@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 namespace DTerrain
@@ -40,9 +36,9 @@ namespace DTerrain
             else return len;
         }
 
-        public static Range operator+(Range r, int a)
+        public static Range operator +(Range r, int a)
         {
-            return new Range(r.Min+a,r.Max+a);
+            return new Range(r.Min + a, r.Max + a);
         }
 
         public static Range operator -(Range r, int a)

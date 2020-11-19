@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace DTerrain
@@ -12,7 +11,7 @@ namespace DTerrain
     {
 
         public List<Range> Ranges;
-        public Color OutlineColor=Color.black;
+        public Color OutlineColor = Color.black;
 
         public int Width { get; private set; }
         public int Height { get; private set; }

@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace DTerrain
+namespace DTerrain.Destructor
 {
     /// <summary>
     /// Simple destructor that creates a circle shaped destruction at given point with an outline.
@@ -12,7 +11,7 @@ namespace DTerrain
         private Shape destroyShape;
         private List<Column> outlineColumns; //We should remember the outline as a "ring" not as primitive Shape (it uses only ranges, not columns)
         private int offset = 0;
-        private float multiplier=0f;
+        private float multiplier = 0f;
 
         /// <summary>
         /// Constructor for WormsDestructor. Simple destructor that creates a circle shaped destruction at given point with an outline.
@@ -20,7 +19,7 @@ namespace DTerrain
         /// <param name="destructionRadius">Radius of a destruction circle.</param>
         /// <param name="outlineRadius">Radius of an outline circle</param>
         /// <param name="multiplier">How darker than original texture outline is [0;1]</param>
-        public WormsDestructor(int destructionRadius, int outlineRadius, float multiplier=0f)
+        public WormsDestructor(int destructionRadius, int outlineRadius, float multiplier = 0f)
         {
             this.multiplier = multiplier;
 
@@ -29,7 +28,7 @@ namespace DTerrain
             Shape outlineShape = Shape.GenerateShapeCircle(outlineRadius);
 
             //And outline shape as columns...
-            outlineColumns=new List<Column>();
+            outlineColumns = new List<Column>();
             int k = 0;
             foreach (var range in outlineShape.Ranges)
             {
@@ -63,7 +62,7 @@ namespace DTerrain
                         col.r = col.r * multiplier;
                         col.g = col.g * multiplier;
                         col.b = col.b * multiplier;
-                        w.MakeOutline(x+k-offset,y+i-offset, col);
+                        w.MakeOutline(x + k - offset, y + i - offset, col);
                     }
                 }
 

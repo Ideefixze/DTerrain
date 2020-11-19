@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace DTerrain
@@ -11,21 +10,21 @@ namespace DTerrain
     {
         [SerializeField]
         [Min(1)]
-        private int chunksX=16;
+        private int chunksX = 16;
         [SerializeField]
         [Min(1)]
-        private int chunksY=16;
+        private int chunksY = 16;
 
         [SerializeField]
-        private Texture2D originalTexture=null;
+        private Texture2D originalTexture = null;
 
         [SerializeField]
         [Tooltip("GameObject representing chunk that will be spawned.")]
-        private GameObject baseChunk=null;
+        private GameObject baseChunk = null;
 
         private int chunkSizeX;
         private int chunkSizeY;
-        
+
         private List<DestructibleTerrainChunk> chunks;
 
 
@@ -36,7 +35,7 @@ namespace DTerrain
         void Start()
         {
             CreateChunks();
-            Camera.main.transform.position = new Vector3((float)originalTexture.width/PPU/2.0f, (float)originalTexture.height/PPU/2.0f, -10.0f);
+            Camera.main.transform.position = new Vector3((float)originalTexture.width / PPU / 2.0f, (float)originalTexture.height / PPU / 2.0f, -10.0f);
         }
 
         /// <summary>
@@ -45,28 +44,28 @@ namespace DTerrain
         void CreateChunks()
         {
             chunks = new List<DestructibleTerrainChunk>();
-            Texture2D[] pieces = new Texture2D[chunksX*chunksY];
-            chunkSizeX = originalTexture.width/chunksX;
-            chunkSizeY = originalTexture.height/chunksY;
+            Texture2D[] pieces = new Texture2D[chunksX * chunksY];
+            chunkSizeX = originalTexture.width / chunksX;
+            chunkSizeY = originalTexture.height / chunksY;
 
-            for(int i = 0; i<chunksX;i++)
+            for (int i = 0; i < chunksX; i++)
             {
-                for(int j = 0; j<chunksY;j++)
+                for (int j = 0; j < chunksY; j++)
                 {
                     Texture2D piece = new Texture2D(chunkSizeX, chunkSizeY);
                     piece.filterMode = FilterMode.Point;
-                    piece.SetPixels(0,0,chunkSizeX,chunkSizeY, originalTexture.GetPixels(i*chunkSizeX,j*chunkSizeY,chunkSizeX,chunkSizeY));
+                    piece.SetPixels(0, 0, chunkSizeX, chunkSizeY, originalTexture.GetPixels(i * chunkSizeX, j * chunkSizeY, chunkSizeX, chunkSizeY));
                     piece.Apply();
-                    pieces[i*chunksY + j] = piece;
+                    pieces[i * chunksY + j] = piece;
 
                     GameObject c = Instantiate(baseChunk);
-                    c.transform.position = gameObject.transform.position+new Vector3(i*(float)chunkSizeX/PPU,j*(float)chunkSizeY/PPU,0);
-                    c.GetComponent<SpriteRenderer>().sprite = Sprite.Create(piece,new Rect(0,0,chunkSizeX,chunkSizeY),new Vector2(0.5f,0.5f),PPU);
+                    c.transform.position = gameObject.transform.position + new Vector3(i * (float)chunkSizeX / PPU, j * (float)chunkSizeY / PPU, 0);
+                    c.GetComponent<SpriteRenderer>().sprite = Sprite.Create(piece, new Rect(0, 0, chunkSizeX, chunkSizeY), new Vector2(0.5f, 0.5f), PPU);
                     c.transform.SetParent(transform);
 
                     DestructibleTerrainChunk chunkComp = c.GetComponent<DestructibleTerrainChunk>();
-                
-                    if(chunkComp!=null)
+
+                    if (chunkComp != null)
                         chunks.Add(chunkComp);
                     else
                     {
@@ -88,7 +87,7 @@ namespace DTerrain
             int k = 0;
             foreach (Range r in s.Ranges)
             {
-                DestroyTerrain(x+k,y,r, s.Height);
+                DestroyTerrain(x + k, y, r, s.Height);
                 k++;
             }
         }
@@ -115,8 +114,8 @@ namespace DTerrain
             int k = 0;
             foreach (Range r in s.Ranges)
             {
-                for(int i = r.Min;i<r.Max;i++)
-                    MakeOutline(x+k,y+i,s.OutlineColor);
+                for (int i = r.Min; i < r.Max; i++)
+                    MakeOutline(x + k, y + i, s.OutlineColor);
                 k++;
             }
         }
@@ -129,7 +128,7 @@ namespace DTerrain
         /// <param name="r">Range</param>
         /// <param name="height">Maximum height of an range (used in shape deletion - skip it)</param>
         /// <returns></returns>
-        public bool DestroyTerrain(int x, int y, Range r, int height=-1)
+        public bool DestroyTerrain(int x, int y, Range r, int height = -1)
         {
             if (height == -1)
                 height = r.Length();
@@ -144,9 +143,9 @@ namespace DTerrain
             //Iterate over possible chunks vertically that can be contained in destruction for this range
             while (true)
             {
-                if (cid >= 0 && cid < chunks.Count && k+ychunk<chunksY && (k-1)*chunkSizeY<=height)
+                if (cid >= 0 && cid < chunks.Count && k + ychunk < chunksY && (k - 1) * chunkSizeY <= height)
                 {
-                    if(chunks[cid].DestroyTerrain(posInChunkX, posInChunkY - k * chunkSizeY, r))
+                    if (chunks[cid].DestroyTerrain(posInChunkX, posInChunkY - k * chunkSizeY, r))
                         chunks[cid].UpdateTerrainOnNextFrame = true;
 
                     cid++;
@@ -170,14 +169,14 @@ namespace DTerrain
         /// <returns>True if any changes were made</returns>
         public bool DestroyTerrain(int x, int y)
         {
-            int xchunk = (x+chunkSizeX/2)/chunkSizeX;
-            int ychunk = (y+chunkSizeY/2)/chunkSizeY;
-            int posInChunkX = x-xchunk*chunkSizeX + chunkSizeX/2;
-            int posInChunkY = y-ychunk*chunkSizeY + chunkSizeY/2;
-            int cid = xchunk*chunksY + ychunk;
-            if(cid>=0 && cid<chunks.Count)
+            int xchunk = (x + chunkSizeX / 2) / chunkSizeX;
+            int ychunk = (y + chunkSizeY / 2) / chunkSizeY;
+            int posInChunkX = x - xchunk * chunkSizeX + chunkSizeX / 2;
+            int posInChunkY = y - ychunk * chunkSizeY + chunkSizeY / 2;
+            int cid = xchunk * chunksY + ychunk;
+            if (cid >= 0 && cid < chunks.Count)
             {
-                return chunks[cid].DestroyTerrain(posInChunkX,posInChunkY);
+                return chunks[cid].DestroyTerrain(posInChunkX, posInChunkY);
             }
             return false;
         }
@@ -200,16 +199,16 @@ namespace DTerrain
         /// <param name="outlineCol">Color</param>
         public void MakeOutline(int x, int y, Color outlineCol)
         {
-            int xchunk = (x+chunkSizeX/2)/chunkSizeX;
-            int ychunk = (y+chunkSizeY/2)/chunkSizeY;
-            int posInChunkX = x-xchunk*chunkSizeX + chunkSizeX/2;
-            int posInChunkY = y-ychunk*chunkSizeY + chunkSizeY/2;
-            int cid = xchunk*chunksY + ychunk;
-            if(cid>=0 && cid<chunks.Count)
+            int xchunk = (x + chunkSizeX / 2) / chunkSizeX;
+            int ychunk = (y + chunkSizeY / 2) / chunkSizeY;
+            int posInChunkX = x - xchunk * chunkSizeX + chunkSizeX / 2;
+            int posInChunkY = y - ychunk * chunkSizeY + chunkSizeY / 2;
+            int cid = xchunk * chunksY + ychunk;
+            if (cid >= 0 && cid < chunks.Count)
             {
-                chunks[cid].MakeOutline(posInChunkX,posInChunkY,outlineCol);
+                chunks[cid].MakeOutline(posInChunkX, posInChunkY, outlineCol);
             }
-        
+
         }
 
         /// <summary>
@@ -220,12 +219,12 @@ namespace DTerrain
         /// <returns>True - filled, False - not filled</returns>
         public bool FilledAt(int x, int y)
         {
-            int xchunk = (x+chunkSizeX/2)/chunkSizeX;
-            int ychunk = (y+chunkSizeY/2)/chunkSizeY;
-            int posInChunkX = x-xchunk*chunkSizeX + chunkSizeX/2;
-            int posInChunkY = y-ychunk*chunkSizeY + chunkSizeY/2;
-            int cid = xchunk*chunksY + ychunk;
-            if(cid>=0 && cid<chunks.Count)
+            int xchunk = (x + chunkSizeX / 2) / chunkSizeX;
+            int ychunk = (y + chunkSizeY / 2) / chunkSizeY;
+            int posInChunkX = x - xchunk * chunkSizeX + chunkSizeX / 2;
+            int posInChunkY = y - ychunk * chunkSizeY + chunkSizeY / 2;
+            int cid = xchunk * chunksY + ychunk;
+            if (cid >= 0 && cid < chunks.Count)
             {
                 return chunks[cid].FilledAt(posInChunkX, posInChunkY);
             }
@@ -247,7 +246,7 @@ namespace DTerrain
             {
                 return chunks[cid].ColorAt(posInChunkX, posInChunkY);
             }
-            return new Color(0,0,0,0);
+            return new Color(0, 0, 0, 0);
         }
 
         /// <summary>

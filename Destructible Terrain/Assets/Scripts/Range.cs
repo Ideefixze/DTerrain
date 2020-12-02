@@ -10,6 +10,15 @@ namespace DTerrain
         public int Min;
         public int Max;
 
+        public int Length { 
+            get
+            {
+                int len = Mathf.Abs(Max - Min);
+                if (len <= 0) return 0;
+                else return len;
+            } 
+        }
+
         public bool isWithin(int point)
         {
             return point <= Max && point >= Min;
@@ -25,15 +34,6 @@ namespace DTerrain
         {
             Min = r.Min;
             Max = r.Max;
-        }
-
-
-        /// <returns>Absolute length of a range.</returns>
-        public int Length()
-        {
-            int len = Mathf.Abs(Max - Min);
-            if (len <= 0) return 0;
-            else return len;
         }
 
         public static Range operator +(Range r, int a)

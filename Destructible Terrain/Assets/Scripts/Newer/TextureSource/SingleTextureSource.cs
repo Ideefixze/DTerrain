@@ -10,12 +10,23 @@ namespace DTerrain
     public class SingleTextureSource: ITextureSource
     {
         public Texture2D OriginalTexture { get; private set; }
-        public Texture2D Texture { get; set; }
 
-        public SingleTextureSource(Texture2D startingTexture)
+        private Texture2D texture;
+        public Texture2D Texture
         {
-            Graphics.CopyTexture(startingTexture, OriginalTexture);
-            Graphics.CopyTexture(startingTexture, Texture);
+            get => texture;
+            set
+            {
+                OriginalTexture = new Texture2D(value.width, value.height);
+                OriginalTexture.filterMode = value.filterMode;
+                Graphics.CopyTexture(value, OriginalTexture);
+
+                texture = new Texture2D(value.width, value.height);
+                texture.filterMode = value.filterMode;
+                Graphics.CopyTexture(value, texture);
+            }
         }
+
+        public int PPU { get; set; }
     }
 }

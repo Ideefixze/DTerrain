@@ -59,8 +59,8 @@ namespace DTerrain
             {
                 Range r1 = new Range(r.Min, pos - 1);
                 Range r2 = new Range(pos + 1, r.Max);
-                if (r1.Length() > 0) AddRange(r1);
-                if (r2.Length() > 0) AddRange(r2);
+                if (r1.Length > 0) AddRange(r1);
+                if (r2.Length > 0) AddRange(r2);
                 Ranges.Remove(r);
             }
         }

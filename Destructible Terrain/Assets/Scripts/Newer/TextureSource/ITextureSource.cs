@@ -6,6 +6,7 @@ namespace DTerrain
 {
     public interface ITextureSource
     {
-        Texture2D Texture { get; }
+        Texture2D Texture { get; set; }
+        int PPU { get; set; }
     }
 }

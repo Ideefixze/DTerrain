@@ -10,8 +10,9 @@ namespace DTerrain
     /// <typeparam name="ChunkType"></typeparam>
     public interface ILayer<ChunkType> where ChunkType:IChunk
     {
-        void InitChunk();
-        void Paint(PaintingParameters paintingParameters);
+        int ChunkCountX { get; set; }
+        int ChunkCountY { get; set; }
+        void InitChunks();
     }
 }
 

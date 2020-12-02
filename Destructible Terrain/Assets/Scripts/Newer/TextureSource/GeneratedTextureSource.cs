@@ -10,7 +10,8 @@ namespace DTerrain
     public class GeneratedTextureSource: ITextureSource
     {
         public ITextureGenerator TextureGenerator { get; set; }
-        public Texture2D Texture { get => TextureGenerator.GenerateTexture(); }
+        public Texture2D Texture { get => TextureGenerator.GenerateTexture(); set { } }
+        public int PPU { get; set; }
 
         public GeneratedTextureSource(ITextureGenerator textureGenerator)
         {

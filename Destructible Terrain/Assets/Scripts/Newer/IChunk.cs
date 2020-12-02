@@ -6,9 +6,8 @@ namespace DTerrain
 {
     public interface IChunk
     {
-        ITextureSource TextureSource { get; }
-
-        void Paint(RectInt r, Color c);
+        void Init();
+        void Update();
     }
 }
 

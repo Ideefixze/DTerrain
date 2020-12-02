@@ -131,7 +131,7 @@ namespace DTerrain
         public bool DestroyTerrain(int x, int y, Range r, int height = -1)
         {
             if (height == -1)
-                height = r.Length();
+                height = r.Length;
 
             int xchunk = (x + chunkSizeX / 2) / chunkSizeX;
             int ychunk = (y + chunkSizeY / 2) / chunkSizeY;

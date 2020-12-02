@@ -4,17 +4,40 @@ using UnityEngine;
 
 namespace DTerrain
 {
-    public class PaintableChunk : IChunk
+    public class PaintableChunk : MonoBehaviour, ITexturedChunk
     {
-        public ITextureSource TextureSource { get; }
+        private SpriteRenderer spriteRenderer;
+        public ITextureSource TextureSource { get; set; }
+        private bool painted=false;
+
+
+        public void Init()
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer.sprite = Sprite.Create(TextureSource.Texture, new Rect(0, 0, TextureSource.Texture.width, TextureSource.Texture.height), new Vector2(0.5f, 0.5f), TextureSource.PPU);
+        }
 
         public void Paint(RectInt r, Color c)
         {
-            int len = r.width * r.height;
+            RectInt common;
+            r.Intersects(new RectInt(0, 0, TextureSource.Texture.width, TextureSource.Texture.height), out common);
+            int len = common.width * common.height;
             Color[] cs = new Color[len];
             for (int i = 0; i < len; i++)
                 cs[i] = c;
-            TextureSource.Texture.SetPixels(r.x, r.y, r.width, r.height, cs);
+            TextureSource.Texture.SetPixels(common.x, common.y, common.width, common.height, cs);
+            painted = true;
+            
+        }
+
+        public void Update()
+        {
+            if(painted)
+            {
+                TextureSource.Texture.Apply();
+                painted = false;
+            }
+            
         }
     }
 }

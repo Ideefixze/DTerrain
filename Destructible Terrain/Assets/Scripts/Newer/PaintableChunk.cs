@@ -8,16 +8,16 @@ namespace DTerrain
     {
         private SpriteRenderer spriteRenderer;
         public ITextureSource TextureSource { get; set; }
-        private bool painted=false;
+        protected bool painted=false;
 
 
-        public void Init()
+        public virtual void Init()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
             spriteRenderer.sprite = Sprite.Create(TextureSource.Texture, new Rect(0, 0, TextureSource.Texture.width, TextureSource.Texture.height), new Vector2(0.5f, 0.5f), TextureSource.PPU);
         }
 
-        public void Paint(RectInt r, Color c)
+        public virtual void Paint(RectInt r, Color c)
         {
             RectInt common;
             r.Intersects(new RectInt(0, 0, TextureSource.Texture.width, TextureSource.Texture.height), out common);
@@ -30,7 +30,7 @@ namespace DTerrain
             
         }
 
-        public void Update()
+        public virtual void Update()
         {
             if(painted)
             {

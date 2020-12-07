@@ -11,9 +11,8 @@ namespace DTerrain
     {
         public void Start()
         {
+            SpawnChunks();
             InitChunks();
-            Camera.main.transform.position = new Vector3((float)originalTexture.width / PPU / 2.0f, (float)originalTexture.height / PPU / 2.0f, -10.0f);
-
             
         }
 

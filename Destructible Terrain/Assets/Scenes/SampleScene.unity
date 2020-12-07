@@ -270,7 +270,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 12, y: 12, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -347,6 +347,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1775323880}
   - component: {fileID: 1775323881}
+  - component: {fileID: 1775323882}
   m_Layer: 0
   m_Name: PaintableLayer
   m_TagString: Untagged
@@ -375,7 +376,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1775323879}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97c47b30dc9305249854dc4edff06ce5, type: 3}
   m_Name: 
@@ -384,6 +385,25 @@ MonoBehaviour:
   <ChunkCountY>k__BackingField: 2
   originalTexture: {fileID: 2800000, guid: c574f0792faeb9949b16c8db38426b7c, type: 3}
   PPU: 32
+  filterMode: 0
+--- !u!114 &1775323882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1775323879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5ac3d2fdf4fd73459485d08b6a7ecf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ChunkCountX>k__BackingField: 16
+  <ChunkCountY>k__BackingField: 16
+  originalTexture: {fileID: 2800000, guid: b080b1d8fe8076f4c82b9217978c206f, type: 3}
+  PPU: 32
+  filterMode: 0
+  colliderAlgorithm: 0
 --- !u!1 &1842062704
 GameObject:
   m_ObjectHideFlags: 0

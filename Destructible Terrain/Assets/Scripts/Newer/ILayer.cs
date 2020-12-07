@@ -12,7 +12,7 @@ namespace DTerrain
     {
         int ChunkCountX { get; set; }
         int ChunkCountY { get; set; }
-        void InitChunks();
+        void SpawnChunks();
     }
 }
 

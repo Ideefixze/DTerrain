@@ -23,9 +23,12 @@ namespace DTerrain
         [SerializeField]
         protected int PPU;
 
+        [SerializeField]
+        protected FilterMode filterMode;
+
         protected List<T> chunks;
 
-        public void InitChunks()
+        public void SpawnChunks()
         {
             chunks = new List<T>();
             chunkSizeX = originalTexture.width / ChunkCountX;
@@ -36,7 +39,7 @@ namespace DTerrain
                 for (int j = 0; j < ChunkCountY; j++)
                 {
                     Texture2D piece = new Texture2D(chunkSizeX, chunkSizeY);
-                    piece.filterMode = FilterMode.Point;
+                    piece.filterMode = filterMode; 
                     piece.SetPixels(0, 0, chunkSizeX, chunkSizeY, originalTexture.GetPixels(i * chunkSizeX, j * chunkSizeY, chunkSizeX, chunkSizeY));
                     piece.Apply();
 
@@ -54,9 +57,15 @@ namespace DTerrain
                     c.transform.SetParent(transform);
 
                     chunks.Add(c.GetComponent<T>());
-
-                    pc.Init();
                 }
+            }
+        }
+
+        public void InitChunks()
+        {
+            foreach(T t in chunks)
+            {
+                t.Init();
             }
         }
 

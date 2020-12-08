@@ -2,10 +2,15 @@
 using UnityEngine;
 namespace DTerrain
 {
-    
-
     public static class UnityExtensions
     {
+        /// <summary>
+        /// Gets a Rect that is an intersection of two Rects.
+        /// </summary>
+        /// <param name="r1">Rect 1</param>
+        /// <param name="r2">Rect 2</param>
+        /// <param name="area">Common area</param>
+        /// <returns>True if r1 and r2 intersect</returns>
         public static bool Intersects(this RectInt r1, RectInt r2, out RectInt area)
         {
             area = new RectInt();
@@ -26,6 +31,7 @@ namespace DTerrain
 
             return false;
         }
+
     }
 
 }

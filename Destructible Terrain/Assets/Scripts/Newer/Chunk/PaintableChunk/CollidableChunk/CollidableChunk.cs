@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace DTerrain
 {
+    /// <summary>
+    /// CollidableChunk on each Paint execution deletes data from a list of columns, that is used to create BoxColliders2D.
+    /// </summary>
     public class CollidableChunk : PaintableChunk
     {
         public float AlphaTreshold { get; set; } = 0.01f;
@@ -21,9 +24,9 @@ namespace DTerrain
             PrepareColumns();
         }
 
-        public override void Paint(RectInt r, Color c)
+        public override void Paint(RectInt r, PaintingParameters pp)
         {
-            base.Paint(r, c);
+            base.Paint(r, pp);
             DeleteFromColumns(r);
         }
 

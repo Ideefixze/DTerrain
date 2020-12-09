@@ -17,5 +17,10 @@ namespace DTerrain
         {
             TextureGenerator = textureGenerator;
         }
+
+        public void SetUpToRenderer(SpriteRenderer spriteRenderer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

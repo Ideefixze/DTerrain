@@ -8,5 +8,7 @@ namespace DTerrain
     {
         Texture2D Texture { get; set; }
         int PPU { get; set; }
+
+        void SetUpToRenderer(SpriteRenderer spriteRenderer);
     }
 }

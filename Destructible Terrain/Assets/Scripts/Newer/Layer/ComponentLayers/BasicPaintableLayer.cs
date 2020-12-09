@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DTerrain
 {
-    public class BasicPaintableLayer : PaintableLayer<PaintableChunk, SingleTextureSource>
+    public class BasicPaintableLayer : PaintableLayer
     {
         public virtual void Start()
         {

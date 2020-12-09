@@ -7,8 +7,6 @@ namespace DTerrain
     public interface ITexturedChunk :IChunk
     {
         ITextureSource TextureSource { get; }
-
-        void Paint(RectInt r, Color c);
     }
 }
 

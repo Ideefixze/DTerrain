@@ -35,7 +35,7 @@ Whenever a change is made (destruction) each **Chunk** recalculates sub-textures
 ## Special thanks:
 - **/u/idbrii** for pointing out a fix that nearly doubled the FPS.
 
-## Features to be added soon:
+## Features in the future:
 - Rewriting the whole code to be more expandable (DONE ✔️)
 - Sand (IN PROGRESS 🔜)
 - Adding wiki on how to use it 

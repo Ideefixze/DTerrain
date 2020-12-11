@@ -10,7 +10,7 @@ namespace DTerrain
     public class ClickAndDestroy : MonoBehaviour
     {
         [SerializeField]
-        private int sphereSize = 16;
+        private int circleSize = 16;
         [SerializeField]
         private int outlineSize = 4;
 
@@ -30,38 +30,24 @@ namespace DTerrain
         protected virtual void OnMouseClick()
         {
             Vector3 p = Camera.main.ScreenToWorldPoint(Input.mousePosition) - collisionLayer.transform.position;
-            collisionLayer.Paint(new PaintingParameters() { Color = Color.clear, Position = new Vector2Int((int)(p.x * collisionLayer.PPU) - sphereSize, (int)(p.y * collisionLayer.PPU) - sphereSize), Shape = Shape.GenerateShapeCircle(sphereSize), PaintingMode=PaintingMode.REPLACE_COLOR });
-
-
-            /*
-            outlineLayer.Paint(new PaintingParameters()
-            {
-                Color = new Color(0.0f,0.0f,0.0f,0.7f),
-                Position = new Vector2Int((int)(p.x * outlineLayer.PPU) - sphereSize - outlineSize, (int)(p.y * outlineLayer.PPU) - sphereSize - outlineSize),
-                Shape = Shape.GenerateShapeCircle(sphereSize + outlineSize),
-                PaintingMode = PaintingMode.REPLACE_COLOR
+            collisionLayer.Paint(new PaintingParameters() 
+            { 
+                Color = Color.clear, 
+                Position = new Vector2Int((int)(p.x * collisionLayer.PPU) - circleSize, (int)(p.y * collisionLayer.PPU) - circleSize), 
+                Shape = Shape.GenerateShapeCircle(circleSize), 
+                PaintingMode=PaintingMode.REPLACE_COLOR,
+                DestructionMode = DestructionMode.DESTROY
             });
-            */
 
-            /*
             outlineLayer.Paint(new PaintingParameters() 
-            { Color = new Color(-0.1f,-0.1f,-0.1f,0.0f), 
-            Position = new Vector2Int((int)(p.x * outlineLayer.PPU) - sphereSize-outlineSize, (int)(p.y * outlineLayer.PPU) - sphereSize-outlineSize), 
-            Shape = Shape.GenerateShapeCircle(sphereSize+outlineSize), 
-            PaintingMode=PaintingMode.ADD_COLOR 
-            });*/
-
-            
-            outlineLayer.Paint(new PaintingParameters() 
-            { Color = Color.black, 
-            Position = new Vector2Int((int)(p.x * outlineLayer.PPU) - sphereSize-outlineSize, (int)(p.y * outlineLayer.PPU) - sphereSize-outlineSize), 
-            Shape = Shape.GenerateShapeCircle(sphereSize+outlineSize), 
-            PaintingMode=PaintingMode.REPLACE_COLOR
+            { 
+                Color = new Color(0.0f,0.0f,0.0f,0.75f), 
+                Position = new Vector2Int((int)(p.x * outlineLayer.PPU) - circleSize-outlineSize, (int)(p.y * outlineLayer.PPU) - circleSize-outlineSize), 
+                Shape = Shape.GenerateShapeCircle(circleSize+outlineSize), 
+                PaintingMode=PaintingMode.REPLACE_COLOR,
+                DestructionMode = DestructionMode.NONE
             });
             
-
-            //p = Camera.main.ScreenToWorldPoint(Input.mousePosition) - bpl.transform.position;
-            //bpl.Paint(new PaintingParameters() { Color = Color.black, Position = new Vector2Int((int)(p.x * bpl.PPU) - sphereSize - outlineSize, (int)(p.y * bpl.PPU) - sphereSize - outlineSize), Shape = Shape.GenerateShapeCircle(sphereSize + outlineSize) });
         }
     }
 }

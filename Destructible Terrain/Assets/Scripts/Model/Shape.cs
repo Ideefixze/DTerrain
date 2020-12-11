@@ -27,7 +27,7 @@ namespace DTerrain
         /// Generates a Shape: circle.
         /// </summary>
         /// <param name="r">Radius</param>
-        /// <returns>Shape that looks like circle.</returns>
+        /// <returns>Shape: circle.</returns>
         public static Shape GenerateShapeCircle(int r)
         {
             int centerX = r;

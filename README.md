@@ -1,13 +1,14 @@
 # DTerrain
 Destructible terrain in Unity
 
-Simple destructible terrain in Unity based on bitmaps and Quadtree. Pretty efficent and works with Unity Colliders. Very reusable and customizable for your own needs. This beginner friendly tool will take your game to the next level. If you want to use it, clone this repository and see example scene.
+Simple **destructible terrain** in Unity based on bitmaps and Quadtree. Pretty efficent and works with Unity Colliders. Very reusable and customizable for your own needs. This beginner friendly tool will take your game to the next level. If you want to use it, clone this repository and see example scene.
+
+Also provides additional functionalities as **painting on customizable layers**.
 
 ![Demo](dterrainexample_new.gif)
 
-
 ## FAQ
-### How it works?
+### How destructible terrain works?
 I use **Ranges**: [min;max]
 Then I make a list of ranges called **Column**.
 I fill those ranges using image (if color.alpha>threshold I fill it and use range to remember it effectively).
@@ -22,13 +23,13 @@ Whenever a change is made (destruction) each **Chunk** recalculates sub-textures
 ### Would it work in realtime game?
 *Yes. Example scene rarely goes below ~80 FPS on my machine and it contains a medium-sized destruction every frame.*
 ### How I can make it work even faster?
-*Increase number of chunks or reduce number of operations done on world per frame.*
+*Slightly increase number of chunks or reduce number of operations done on world per frame.*
 *Reduce unnecessary per frame changes to the terrain as it makes chunk to recalculate it's colliders.*
 *Recalculating colliders takes about 90% of all computation for DTerrain, keep that in mind.*
 ### I can't access any of the components from this package.
 *Make sure you add ```using DTerrain;``` at the begining of you scripts.*
 ### Will it work with my Unity version?
-*It should as code is universal and doesn't use version specific tweaks in Unity (only BoxColliders2D).*
+*It should as code is universal and doesn't use version specific tweaks in Unity (only BoxColliders2D, SpriteRenderers and SpriteMasks).*
 ### Can I use it for free?
 *Yes. Now and forever. You don't have to credit me, but I'd really like to know if you built something meaningful with it.* 
 

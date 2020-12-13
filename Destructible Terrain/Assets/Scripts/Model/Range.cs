@@ -36,6 +36,19 @@ namespace DTerrain
             Max = r.Max;
         }
 
+        public override bool Equals(object obj)
+        {
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                Range r = (Range)obj;
+                return (Min == r.Min) && (Max == r.Max);
+            }
+        }
+
         public static Range operator +(Range r, int a)
         {
             return new Range(r.Min + a, r.Max + a);
@@ -44,6 +57,20 @@ namespace DTerrain
         public static Range operator -(Range r, int a)
         {
             return new Range(r.Min - a, r.Max - a);
+        }
+
+        public static Range Sum(Range a, Range b)
+        {
+            if (a.Min <= b.Min && a.Max >= b.Max) // abBA = aA
+                return new Range(a);
+
+            if (a.Min <= b.Min && a.Max >= b.Min) //abXAX
+                return new Range(a.Min, Mathf.Max(b.Max, a.Max));
+
+            if (b.Min <= a.Min && b.Max >= a.Min) //baXAX
+                return new Range(b.Min, Mathf.Max(a.Max,b.Max));
+
+            return null;
         }
 
     }

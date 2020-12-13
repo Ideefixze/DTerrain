@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DTerrain
 {
-    public class PaintableLayer : MonoBehaviour, ILayer<PaintableChunk>
+    public class PaintableLayer<T> : MonoBehaviour, ILayer<T> where T:PaintableChunk
     {
         [field:SerializeField]
         public int ChunkCountX { get; set; }
@@ -18,10 +18,10 @@ namespace DTerrain
         protected int chunkSizeY;
 
         [SerializeField]
-        private GameObject chunkTemplate;
+        protected GameObject chunkTemplate;
 
-        [SerializeField]
-        protected Texture2D originalTexture = null;
+        [field:SerializeField]
+        public Texture2D OriginalTexture { get; set; }
 
         [field:SerializeField]
         public int PPU { get; protected set; }
@@ -29,16 +29,16 @@ namespace DTerrain
         [SerializeField]
         protected FilterMode filterMode;
 
-        public List<PaintableChunk> Chunks { get; private set; }
+        public List<T> Chunks { get; private set; }
 
         /// <summary>
         /// Spawns all chunks that are required for full functionality and adds them to the list named 'Chunks'.
         /// </summary>
-        public void SpawnChunks()
+        public virtual void SpawnChunks()
         {
-            Chunks = new List<PaintableChunk>();
-            chunkSizeX = originalTexture.width / ChunkCountX;
-            chunkSizeY = originalTexture.height / ChunkCountY;
+            Chunks = new List<T>();
+            chunkSizeX = OriginalTexture.width / ChunkCountX;
+            chunkSizeY = OriginalTexture.height / ChunkCountY;
 
             for (int i = 0; i < ChunkCountX; i++)
             {
@@ -46,7 +46,7 @@ namespace DTerrain
                 {
                     Texture2D piece = new Texture2D(chunkSizeX, chunkSizeY);
                     piece.filterMode = filterMode; 
-                    piece.SetPixels(0, 0, chunkSizeX, chunkSizeY, originalTexture.GetPixels(i * chunkSizeX, j * chunkSizeY, chunkSizeX, chunkSizeY));
+                    piece.SetPixels(0, 0, chunkSizeX, chunkSizeY, OriginalTexture.GetPixels(i * chunkSizeX, j * chunkSizeY, chunkSizeX, chunkSizeY));
                     piece.Apply();
 
 
@@ -72,12 +72,12 @@ namespace DTerrain
                     c.transform.position = gameObject.transform.position + new Vector3(i * (float)chunkSizeX / PPU, j * (float)chunkSizeY / PPU, 0);
                     c.transform.SetParent(transform);
 
-                    Chunks.Add(c.GetComponent<PaintableChunk>());
+                    Chunks.Add(c.GetComponent<T>());
                 }
             }
         }
 
-        public void InitChunks()
+        public virtual void InitChunks()
         {
             foreach(PaintableChunk t in Chunks)
             {

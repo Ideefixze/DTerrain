@@ -13,8 +13,8 @@ namespace DTerrain
     public class CollidableChunk : PaintableChunk
     {
         public float AlphaTreshold { get; set; } = 0.01f;
-        private List<Column> columns;
-        private IChunkCollider chunkCollider;
+        protected List<Column> columns;
+        protected IChunkCollider chunkCollider;
         protected bool colliderChanged = true;
 
         public override void Init()
@@ -31,7 +31,7 @@ namespace DTerrain
             if(pp.DestructionMode==DestructionMode.DESTROY)
                 DeleteFromColumns(r);
             if (pp.DestructionMode == DestructionMode.BUILD)
-                throw new NotImplementedException();
+                AddToColumns(r);
         }
 
         public override void Update()
@@ -61,6 +61,17 @@ namespace DTerrain
             for(int i = 0; i<common.width;i++)
             {
                 colliderChanged = columns[common.x + i].DelRange(new Range(common.y, common.y+common.height)) || colliderChanged;
+            }
+        }
+
+        private void AddToColumns(RectInt rect)
+        {
+            RectInt common;
+            rect.Intersects(new RectInt(0, 0, TextureSource.Texture.width, TextureSource.Texture.height), out common);
+
+            for (int i = 0; i < common.width; i++)
+            {
+                colliderChanged = columns[common.x + i].SumRange(new Range(common.y, common.y + common.height)) || colliderChanged;
             }
         }
 

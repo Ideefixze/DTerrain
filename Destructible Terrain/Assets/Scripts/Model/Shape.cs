@@ -11,7 +11,6 @@ namespace DTerrain
     {
 
         public List<Range> Ranges;
-        public Color OutlineColor = Color.black;
 
         public int Width { get; private set; }
         public int Height { get; private set; }
@@ -21,6 +20,13 @@ namespace DTerrain
             Width = w;
             Height = h;
             Ranges = new List<Range>();
+        }
+
+        public static Shape GenerateShapeRange(int length)
+        {
+            Shape s = new Shape(1, length);
+            s.Ranges.Add(new Range(0, length));
+            return s;
         }
 
         /// <summary>

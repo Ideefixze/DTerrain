@@ -8,6 +8,8 @@ namespace DTerrain
     {
         void Init();
         void Update();
+
+        bool IsOccupied(Vector2Int at);
     }
 }
 

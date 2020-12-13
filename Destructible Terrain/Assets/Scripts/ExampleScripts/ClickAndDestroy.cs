@@ -35,8 +35,8 @@ namespace DTerrain
                 Color = Color.clear, 
                 Position = new Vector2Int((int)(p.x * collisionLayer.PPU) - circleSize, (int)(p.y * collisionLayer.PPU) - circleSize), 
                 Shape = Shape.GenerateShapeCircle(circleSize), 
-                PaintingMode=PaintingMode.REPLACE_COLOR,
-                DestructionMode = DestructionMode.DESTROY
+                PaintingMode=PaintingMode.NONE,
+                DestructionMode = DestructionMode.BUILD
             });
 
             outlineLayer.Paint(new PaintingParameters() 

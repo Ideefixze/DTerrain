@@ -123,5 +123,31 @@ namespace DTerrain
             return changed;
         }
 
+        public bool SumRange(Range addr)
+        {
+            bool summed = false;
+            bool changed = false;
+            for(int i = 0; i<Ranges.Count;i++)
+            {
+                Range sum = Range.Sum(addr, Ranges[i]);
+                
+                if (sum!=null)
+                {
+                    if (sum.Equals(Ranges[i]) == false) changed = true;
+                    Ranges[i] = sum;
+                    summed = true;
+                    break;
+                }
+
+            }
+            if(summed==false)
+            {
+                AddRange(addr);
+                changed = true;
+            }
+
+            return changed;
+        }
+
     }
 }

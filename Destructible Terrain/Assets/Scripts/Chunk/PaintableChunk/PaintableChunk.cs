@@ -9,7 +9,10 @@ namespace DTerrain
     public class PaintableChunk : MonoBehaviour, ITexturedChunk
     {
         public SpriteRenderer SpriteRenderer { get; private set; }
+
         public ITextureSource TextureSource { get; set; }
+        
+
         protected bool painted=false;
 
 
@@ -23,6 +26,8 @@ namespace DTerrain
 
         public virtual void Paint(RectInt r, PaintingParameters pp)
         {
+            if (pp.PaintingMode == PaintingMode.NONE) return;
+
             //Find common rect that will be applied on this texture rect
             RectInt common;
             r.Intersects(new RectInt(0, 0, TextureSource.Texture.width, TextureSource.Texture.height), out common);
@@ -62,6 +67,13 @@ namespace DTerrain
                 painted = false;
             }
             
+        }
+
+        public virtual bool IsOccupied(Vector2Int at)
+        {
+            if (at.x >= 0 && at.x < TextureSource.Texture.width && at.y >= 0 && at.y < TextureSource.Texture.height)
+                return TextureSource.Texture.GetPixel(at.x, at.y).a == 0.0f;
+            else return false;
         }
     }
 }

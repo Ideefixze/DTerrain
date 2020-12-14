@@ -70,6 +70,9 @@ namespace DTerrain
         /// </summary>
         /// <param name="delr">Range to delete a column with</param>
         /// <returns>True if any changes were made</returns>
+        /// 
+
+        //TODO: TESTS TESTS
         public bool DelRange(Range delr)
         {
             int a = delr.Min;

@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
 
-namespace Assets.Scripts.Chunk.PaintableChunk.CollidableChunk.SimulatedChunk
+namespace DTerrain
 {
-    interface ISimulationAlgorithm
+    public interface ISimulationAlgorithm
     {
+        /// <summary>
+        /// Generates a painting action list in form of list of PaintingParameters to create a simulation step.
+        /// </summary>
+        /// <param name="columns">Columns of simulated chunk</param>
+        /// <param name="texture">Texture of simulated chunk</param>
+        /// <returns>List of PaintingParameters that have to be applied to chunk in order for it to be simulated</returns>
+        void Simulate(ref List<Column> columns);
+
     }
 }

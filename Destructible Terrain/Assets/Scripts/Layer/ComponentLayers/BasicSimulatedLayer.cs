@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
 
 namespace DTerrain
 {
@@ -10,13 +10,24 @@ namespace DTerrain
     {
         public virtual void Start()
         {
-            SpawnChunks();
-            InitChunks();
-
+            StartCoroutine(WaitForParentInit());
         }
 
         public virtual void Update()
         {
+            if(Input.GetKeyDown(KeyCode.E))
+            Simulate();
+        }
+
+        IEnumerator WaitForParentInit()
+        {
+            while (ParentLayer.Chunks == null)
+                yield return new WaitForEndOfFrame();
+
+            SpawnChunks();
+            InitChunks();
+
+            yield return null;
         }
     }
 }

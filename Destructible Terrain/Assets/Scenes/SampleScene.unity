@@ -156,7 +156,8 @@ MonoBehaviour:
   <ChunkCountY>k__BackingField: 16
   chunkTemplate: {fileID: 5194434684234072523, guid: d131098cbcac0e44aa81693a2bba460a,
     type: 3}
-  originalTexture: {fileID: 2800000, guid: b080b1d8fe8076f4c82b9217978c206f, type: 3}
+  <OriginalTexture>k__BackingField: {fileID: 2800000, guid: b080b1d8fe8076f4c82b9217978c206f,
+    type: 3}
   <PPU>k__BackingField: 32
   filterMode: 0
 --- !u!4 &44864349
@@ -185,6 +186,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -207,7 +209,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a160d838ff8b4b4693ac20007e008c7, type: 3}
   m_Name: 
@@ -271,12 +273,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25, y: 12, z: -10}
+  m_LocalPosition: {x: 4, y: 4, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e865ffe4c819d0f4a9b2db8880bc0e3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Speed: 20
 --- !u!850595691 &1193366004
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -354,7 +369,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1512562476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,11 +382,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6c7228ece280e44e92f1581e654f35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ChunkCountX>k__BackingField: 0
-  <ChunkCountY>k__BackingField: 0
-  chunkTemplate: {fileID: 0}
-  originalTexture: {fileID: 0}
-  <PPU>k__BackingField: 0
+  <ChunkCountX>k__BackingField: 4
+  <ChunkCountY>k__BackingField: 4
+  chunkTemplate: {fileID: 5194434684234072523, guid: bcaf16511105f524d9ef3f964fd0799c,
+    type: 3}
+  <OriginalTexture>k__BackingField: {fileID: 2800000, guid: 1c79253dee19ead4882080fba47a9da2,
+    type: 3}
+  <PPU>k__BackingField: 8
   filterMode: 0
   ParentLayer: {fileID: 1775323881}
 --- !u!4 &1512562477
@@ -435,7 +452,8 @@ MonoBehaviour:
   <ChunkCountY>k__BackingField: 16
   chunkTemplate: {fileID: 5194434684234072523, guid: be4c8a8d550d874448a7ebe047c57492,
     type: 3}
-  originalTexture: {fileID: 2800000, guid: b080b1d8fe8076f4c82b9217978c206f, type: 3}
+  <OriginalTexture>k__BackingField: {fileID: 2800000, guid: b080b1d8fe8076f4c82b9217978c206f,
+    type: 3}
   <PPU>k__BackingField: 32
   filterMode: 0
 --- !u!1 &1842062704
@@ -495,7 +513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c42418d368568804dad61258d52c2290, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circleSize: 4
-  outlineSize: 1
+  circleSize: 8
+  outlineSize: 4
   collisionLayer: {fileID: 1775323881}
   outlineLayer: {fileID: 44864348}

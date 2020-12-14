@@ -19,14 +19,14 @@ namespace DTerrain
         public virtual void Init()
         {
             SpriteRenderer = GetComponent<SpriteRenderer>();
-            SpriteRenderer.sprite = Sprite.Create(TextureSource.Texture, new Rect(0, 0, TextureSource.Texture.width, TextureSource.Texture.height), new Vector2(0.5f, 0.5f), TextureSource.PPU);
+            SpriteRenderer.sprite = Sprite.Create(TextureSource.Texture, new Rect(0, 0, TextureSource.Texture.width, TextureSource.Texture.height), new Vector2(0.5f, 0.5f), TextureSource.PPU,0,SpriteMeshType.FullRect);
             TextureSource.SetUpToRenderer(SpriteRenderer);
 
         }
 
-        public virtual void Paint(RectInt r, PaintingParameters pp)
+        public virtual bool Paint(RectInt r, PaintingParameters pp)
         {
-            if (pp.PaintingMode == PaintingMode.NONE) return;
+            if (pp.PaintingMode == PaintingMode.NONE) return false;
 
             //Find common rect that will be applied on this texture rect
             RectInt common;
@@ -34,6 +34,9 @@ namespace DTerrain
 
             //Generate color array...
             int len = common.width * common.height;
+
+            if (len == 0) return false;
+
             Color[] cs = new Color[len];
 
             //...using paiting method
@@ -56,6 +59,7 @@ namespace DTerrain
 
             //Set up this chunk as ready to be updated on next Update()
             painted = true;
+            return true;
             
         }
 

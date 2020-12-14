@@ -129,7 +129,7 @@ namespace DTerrain
             {
                 if (cid >= 0 && cid < Chunks.Count && k + ychunk < ChunkCountY && (k - 1) * chunkSizeY <= height)
                 {
-                    Chunks[cid].Paint(new RectInt(posInChunkX, posInChunkY - k * chunkSizeY + r.Min, 1, r.Length), pp);
+                    Chunks[cid].Paint(new RectInt(posInChunkX, posInChunkY - k * chunkSizeY + r.Min, 1, r.Length+1), pp);
                     cid++;
                     k++;
                 }

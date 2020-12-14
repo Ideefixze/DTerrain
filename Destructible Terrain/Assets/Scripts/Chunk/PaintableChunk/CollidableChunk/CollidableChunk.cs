@@ -24,14 +24,16 @@ namespace DTerrain
             PrepareColumns();
         }
 
-        public override void Paint(RectInt r, PaintingParameters pp)
+        public override bool Paint(RectInt r, PaintingParameters pp)
         {
-            base.Paint(r, pp);
+            bool b = base.Paint(r, pp);
 
             if(pp.DestructionMode==DestructionMode.DESTROY)
                 DeleteFromColumns(r);
             if (pp.DestructionMode == DestructionMode.BUILD)
                 AddToColumns(r);
+
+            return b;
         }
 
         public override void Update()
@@ -60,7 +62,7 @@ namespace DTerrain
 
             for(int i = 0; i<common.width;i++)
             {
-                colliderChanged = columns[common.x + i].DelRange(new Range(common.y, common.y+common.height)) || colliderChanged;
+                colliderChanged = columns[common.x + i].DelRange(new Range(common.y-1, common.y+common.height)) || colliderChanged;
             }
         }
 
@@ -71,7 +73,7 @@ namespace DTerrain
 
             for (int i = 0; i < common.width; i++)
             {
-                colliderChanged = columns[common.x + i].SumRange(new Range(common.y, common.y + common.height)) || colliderChanged;
+                colliderChanged = columns[common.x + i].SumRange(new Range(common.y, common.y + common.height-1)) || colliderChanged;
             }
         }
 
@@ -80,7 +82,7 @@ namespace DTerrain
         /// <summary>
         /// Using terrainTexture creates a list of ranges (tiles that are egible for a collider).
         /// </summary>
-        private void PrepareColumns()
+        protected void PrepareColumns()
         {
             columns?.Clear();
             columns = new List<Column>();

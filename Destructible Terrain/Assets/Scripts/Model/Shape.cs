@@ -77,5 +77,17 @@ namespace DTerrain
 
             return s;
         }
+
+        public static Shape GenerateShapeRect(int w, int h)
+        {
+            Shape s = new Shape(w, h);
+
+            for(int i = 0; i<w;i++)
+            {
+                s.Ranges.Add(new Range(0, h-1)); //0,1,2...h-1
+            }
+
+            return s;
+        }
     }
 }

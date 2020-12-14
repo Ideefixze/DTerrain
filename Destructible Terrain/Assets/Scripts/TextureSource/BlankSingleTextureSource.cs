@@ -14,7 +14,7 @@ namespace DTerrain
         private Color startingColor;
 
         private Texture2D texture;
-        public new Texture2D Texture
+        public Texture2D Texture
         {
             get => texture;
             set

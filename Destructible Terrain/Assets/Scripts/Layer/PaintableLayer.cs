@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -85,15 +86,17 @@ namespace DTerrain
             }
         }
 
+        public int GetChunkIDByPosition(Vector2Int position)
+        {
+            int xchunk = (position.x + chunkSizeX / 2) / chunkSizeX;
+            int ychunk = (position.y + chunkSizeY / 2) / chunkSizeY;
+            int cid = xchunk * ChunkCountY + ychunk;
+            return cid;
+        }
+
         public PaintableChunk GetChunkByPosition(Vector2Int position)
         {
-            int x = position.x;
-            int y = position.y;
-            int xchunk = (x + chunkSizeX / 2) / chunkSizeX;
-            int ychunk = (y + chunkSizeY / 2) / chunkSizeY;
-            int cid = xchunk * ChunkCountY + ychunk;
-
-            return Chunks[cid];
+            return Chunks[GetChunkIDByPosition(position)];
         }
 
         public void Paint(PaintingParameters paintingParameters)
@@ -101,7 +104,7 @@ namespace DTerrain
             int k = 0;
             foreach (Range r in paintingParameters.Shape.Ranges)
             {
-                PaintColumn(paintingParameters.Position.x + k, paintingParameters.Position.y, r, paintingParameters);
+                PaintColumn(paintingParameters.Position.x + k, paintingParameters.Position.y+r.Min, r, paintingParameters);
                 k++;
             }
         }
@@ -115,8 +118,9 @@ namespace DTerrain
         /// <param name="c">Color to be painted</param>
         private void PaintColumn(int x, int y, Range r, PaintingParameters pp)
         {
-            int height = r.Length + chunkSizeY;
-
+            
+            int height = r.Length;
+            //We don't use a method for getting chunk id because we need some variables
             int xchunk = (x + chunkSizeX / 2) / chunkSizeX;
             int ychunk = (y + chunkSizeY / 2) / chunkSizeY;
             int posInChunkX = x - xchunk * chunkSizeX + chunkSizeX / 2;
@@ -127,9 +131,10 @@ namespace DTerrain
             //Iterate over possible chunks vertically that can be contained in painting for this range
             while (true)
             {
+                
                 if (cid >= 0 && cid < Chunks.Count && k + ychunk < ChunkCountY && (k - 1) * chunkSizeY <= height)
                 {
-                    Chunks[cid].Paint(new RectInt(posInChunkX, posInChunkY - k * chunkSizeY + r.Min, 1, r.Length+1), pp);
+                    Chunks[cid].Paint(new RectInt(posInChunkX, posInChunkY - k * chunkSizeY, 1, r.Length+1), pp);
                     cid++;
                     k++;
                 }

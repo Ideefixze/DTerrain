@@ -152,8 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4af001885c4fabf44bb122b3b693310e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ChunkCountX>k__BackingField: 16
-  <ChunkCountY>k__BackingField: 16
+  <ChunkCountX>k__BackingField: 8
+  <ChunkCountY>k__BackingField: 8
   chunkTemplate: {fileID: 5194434684234072523, guid: d131098cbcac0e44aa81693a2bba460a,
     type: 3}
   <OriginalTexture>k__BackingField: {fileID: 2800000, guid: b080b1d8fe8076f4c82b9217978c206f,
@@ -396,8 +396,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4af001885c4fabf44bb122b3b693310e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ChunkCountX>k__BackingField: 16
-  <ChunkCountY>k__BackingField: 16
+  <ChunkCountX>k__BackingField: 8
+  <ChunkCountY>k__BackingField: 8
   chunkTemplate: {fileID: 5194434684234072523, guid: be4c8a8d550d874448a7ebe047c57492,
     type: 3}
   <OriginalTexture>k__BackingField: {fileID: 2800000, guid: b080b1d8fe8076f4c82b9217978c206f,
@@ -461,7 +461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c42418d368568804dad61258d52c2290, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circleSize: 8
-  outlineSize: 4
+  circleSize: 80
+  outlineSize: 36
   collisionLayer: {fileID: 1775323881}
   outlineLayer: {fileID: 44864348}

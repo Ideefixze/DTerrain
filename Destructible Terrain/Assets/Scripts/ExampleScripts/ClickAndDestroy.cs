@@ -45,6 +45,7 @@ namespace DTerrain
 
         protected virtual void OnLeftMouseButtonClick()
         {
+
             Vector3 p = Camera.main.ScreenToWorldPoint(Input.mousePosition) - collisionLayer.transform.position;
             collisionLayer?.Paint(new PaintingParameters() 
             { 

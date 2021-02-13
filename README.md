@@ -39,5 +39,5 @@ Whenever a change is made (destruction) each **Chunk** recalculates sub-textures
 
 ## Features in the future:
 - Rewriting the whole code to be more expandable (DONE ✔️)
-- Adding mesh optimization (IN PROGRESS 🔜)
+- Adding mesh optimization (DONE ✔️ - separate collision logic and visible layers: see ``SampleScene2``)
 - Adding wiki on how to use it (IN PROGRESS 🔜) 

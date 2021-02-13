@@ -10,6 +10,7 @@ namespace DTerrain
     /// <typeparam name="ChunkType"></typeparam>
     public interface ILayer<T> where T:IChunk
     {
+        Vector2 Offset { get; set; }
         int ChunkCountX { get; set; }
         int ChunkCountY { get; set; }
 

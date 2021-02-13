@@ -11,7 +11,7 @@ namespace DTerrain
         public SpriteRenderer SpriteRenderer { get; private set; }
 
         public ITextureSource TextureSource { get; set; }
-        
+        public int SortingLayerID { get; set; }
 
         protected bool painted=false;
 
@@ -22,6 +22,7 @@ namespace DTerrain
             SpriteRenderer.sprite = Sprite.Create(TextureSource.Texture, new Rect(0, 0, TextureSource.Texture.width, TextureSource.Texture.height), new Vector2(0.5f, 0.5f), TextureSource.PPU,0,SpriteMeshType.FullRect);
             TextureSource.SetUpToRenderer(SpriteRenderer);
 
+            SpriteRenderer.sortingLayerID = SortingLayerID;
         }
 
         public virtual bool Paint(RectInt r, PaintingParameters pp)

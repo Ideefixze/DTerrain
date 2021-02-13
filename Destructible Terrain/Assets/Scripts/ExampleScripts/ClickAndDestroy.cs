@@ -7,20 +7,25 @@ using UnityEngine;
 
 namespace DTerrain
 {
+    /// <summary>
+    /// Simple script that paints with Clear color the primary layer and paints using Black the secondary layer.
+    /// Additionally, on right click paints primary layer with black.
+    /// Use with SampleScene1.
+    /// </summary>
     public class ClickAndDestroy : MonoBehaviour
     {
         [SerializeField]
-        private int circleSize = 16;
+        protected int circleSize = 16;
         [SerializeField]
-        private int outlineSize = 4;
+        protected int outlineSize = 4;
 
-        private Shape destroyCircle;
-        private Shape outlineCircle;
+        protected Shape destroyCircle;
+        protected Shape outlineCircle;
 
         [SerializeField]
-        private BasicPaintableLayer collisionLayer;
+        protected BasicPaintableLayer primaryLayer;
         [SerializeField]
-        private BasicPaintableLayer outlineLayer;
+        protected BasicPaintableLayer secondaryLayer;
 
         public void Start()
         {
@@ -46,20 +51,21 @@ namespace DTerrain
         protected virtual void OnLeftMouseButtonClick()
         {
 
-            Vector3 p = Camera.main.ScreenToWorldPoint(Input.mousePosition) - collisionLayer.transform.position;
-            collisionLayer?.Paint(new PaintingParameters() 
+            Vector3 p = Camera.main.ScreenToWorldPoint(Input.mousePosition) - primaryLayer.transform.position;
+
+            primaryLayer?.Paint(new PaintingParameters() 
             { 
                 Color = Color.clear, 
-                Position = new Vector2Int((int)(p.x * collisionLayer.PPU) - circleSize, (int)(p.y * collisionLayer.PPU) - circleSize), 
+                Position = new Vector2Int((int)(p.x * primaryLayer.PPU) - circleSize, (int)(p.y * primaryLayer.PPU) - circleSize), 
                 Shape = destroyCircle, 
                 PaintingMode=PaintingMode.REPLACE_COLOR,
                 DestructionMode = DestructionMode.DESTROY
             });
 
-            outlineLayer?.Paint(new PaintingParameters() 
+            secondaryLayer?.Paint(new PaintingParameters() 
             { 
                 Color = new Color(0.0f,0.0f,0.0f,0.75f), 
-                Position = new Vector2Int((int)(p.x * outlineLayer.PPU) - circleSize-outlineSize, (int)(p.y * outlineLayer.PPU) - circleSize-outlineSize), 
+                Position = new Vector2Int((int)(p.x * secondaryLayer.PPU) - circleSize-outlineSize, (int)(p.y * secondaryLayer.PPU) - circleSize-outlineSize), 
                 Shape = outlineCircle, 
                 PaintingMode=PaintingMode.REPLACE_COLOR,
                 DestructionMode = DestructionMode.NONE
@@ -69,11 +75,11 @@ namespace DTerrain
 
         protected virtual void OnRightMouseButtonClick()
         {
-            Vector3 p = Camera.main.ScreenToWorldPoint(Input.mousePosition) - collisionLayer.transform.position;
-            collisionLayer?.Paint(new PaintingParameters()
+            Vector3 p = Camera.main.ScreenToWorldPoint(Input.mousePosition) - primaryLayer.transform.position;
+            primaryLayer?.Paint(new PaintingParameters()
             {
                 Color = Color.black,
-                Position = new Vector2Int((int)(p.x * collisionLayer.PPU) - circleSize, (int)(p.y * collisionLayer.PPU) - circleSize),
+                Position = new Vector2Int((int)(p.x * primaryLayer.PPU) - circleSize, (int)(p.y * primaryLayer.PPU) - circleSize),
                 Shape = destroyCircle,
                 PaintingMode = PaintingMode.REPLACE_COLOR,
                 DestructionMode = DestructionMode.BUILD

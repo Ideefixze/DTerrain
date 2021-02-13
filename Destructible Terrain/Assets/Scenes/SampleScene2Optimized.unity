@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 44864349}
   - component: {fileID: 44864348}
   m_Layer: 0
-  m_Name: OutlineLayer
+  m_Name: VisibleLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,14 +152,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4af001885c4fabf44bb122b3b693310e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ChunkCountX>k__BackingField: 2
-  <ChunkCountY>k__BackingField: 2
-  chunkTemplate: {fileID: 5194434684234072523, guid: d131098cbcac0e44aa81693a2bba460a,
+  <Offset>k__BackingField: {x: 0, y: 0}
+  PositionToOffset: 1
+  <ChunkCountX>k__BackingField: 1
+  <ChunkCountY>k__BackingField: 1
+  chunkTemplate: {fileID: 5194434684234072523, guid: 37c73454f27eef44b862eb12bd4ee2a3,
     type: 3}
-  <OriginalTexture>k__BackingField: {fileID: 2800000, guid: b080b1d8fe8076f4c82b9217978c206f,
+  <OriginalTexture>k__BackingField: {fileID: 2800000, guid: 926131c18f8d23043b23b21a7311192b,
     type: 3}
   <PPU>k__BackingField: 32
   filterMode: 0
+  <SortingLayerID>k__BackingField: 0
 --- !u!4 &44864349
 Transform:
   m_ObjectHideFlags: 0
@@ -168,7 +171,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 44864347}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 31.5, y: 31.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -364,7 +367,7 @@ GameObject:
   - component: {fileID: 1775323880}
   - component: {fileID: 1775323881}
   m_Layer: 0
-  m_Name: CollidableLayer
+  m_Name: CollidableLogicLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -396,14 +399,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4af001885c4fabf44bb122b3b693310e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ChunkCountX>k__BackingField: 2
-  <ChunkCountY>k__BackingField: 2
-  chunkTemplate: {fileID: 5194434684234072523, guid: be4c8a8d550d874448a7ebe047c57492,
+  <Offset>k__BackingField: {x: 0, y: 0}
+  PositionToOffset: 0
+  <ChunkCountX>k__BackingField: 64
+  <ChunkCountY>k__BackingField: 64
+  chunkTemplate: {fileID: 5194434684234072523, guid: 847a2e425730df3409385592b669f10a,
     type: 3}
-  <OriginalTexture>k__BackingField: {fileID: 2800000, guid: b080b1d8fe8076f4c82b9217978c206f,
+  <OriginalTexture>k__BackingField: {fileID: 2800000, guid: 926131c18f8d23043b23b21a7311192b,
     type: 3}
   <PPU>k__BackingField: 32
   filterMode: 0
+  <SortingLayerID>k__BackingField: 0
 --- !u!1 &1842062704
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,8 +419,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1842062706}
-  - component: {fileID: 1842062708}
   - component: {fileID: 1842062705}
+  - component: {fileID: 1842062707}
   m_Layer: 0
   m_Name: Destructor
   m_TagString: Untagged
@@ -429,7 +435,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1842062704}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cca46ae4c0560ec4cb0f919183e26880, type: 3}
   m_Name: 
@@ -449,7 +455,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1842062708
+--- !u!114 &1842062707
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -458,10 +464,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1842062704}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c42418d368568804dad61258d52c2290, type: 3}
+  m_Script: {fileID: 11500000, guid: 08ecd5ef68aa19d4ab062dd150387a64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circleSize: 80
-  outlineSize: 8
-  collisionLayer: {fileID: 1775323881}
-  outlineLayer: {fileID: 44864348}
+  circleSize: 16
+  outlineSize: 0
+  primaryLayer: {fileID: 1775323881}
+  secondaryLayer: {fileID: 44864348}

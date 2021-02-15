@@ -10,10 +10,6 @@ namespace DTerrain
 {
     public class PaintableLayer<T> : MonoBehaviour, ILayer<T> where T:PaintableChunk
     {
-        [field: SerializeField]
-        public Vector2 Offset { get; set; }
-
-        public bool PositionToOffset = false;
 
         [field:SerializeField]
         public int ChunkCountX { get; set; }
@@ -47,8 +43,6 @@ namespace DTerrain
         /// </summary>
         public virtual void SpawnChunks()
         {
-            if (PositionToOffset)
-                Offset = transform.position;
 
             Chunks = new List<T>();
             chunkSizeX = OriginalTexture.width / ChunkCountX;
@@ -115,7 +109,6 @@ namespace DTerrain
 
         public void Paint(PaintingParameters paintingParameters)
         {
-            paintingParameters.Position = paintingParameters.Position - new Vector2Int((int)(Offset.x * PPU), (int)(Offset.y * PPU));
             int k = 0;
             foreach (Range r in paintingParameters.Shape.Ranges)
             {

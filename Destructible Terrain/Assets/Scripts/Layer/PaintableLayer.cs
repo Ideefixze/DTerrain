@@ -83,7 +83,7 @@ namespace DTerrain
                     if(sr==null)
                         sr=c.AddComponent<SpriteRenderer>();
 
-                    c.transform.position = gameObject.transform.position + new Vector3(i * (float)chunkSizeX / PPU, j * (float)chunkSizeY / PPU, 0);
+                    c.transform.position = transform.position + new Vector3(i * (float)chunkSizeX / PPU, j * (float)chunkSizeY / PPU, 0);
                     c.transform.SetParent(transform);
 
                     Chunks.Add(c.GetComponent<T>());
@@ -102,8 +102,8 @@ namespace DTerrain
 
         public int GetChunkIDByPosition(Vector2Int position)
         {
-            int xchunk = (position.x + chunkSizeX / 2) / chunkSizeX;
-            int ychunk = (position.y + chunkSizeY / 2) / chunkSizeY;
+            int xchunk = position.x / chunkSizeX;
+            int ychunk = position.y / chunkSizeY;
             int cid = xchunk * ChunkCountY + ychunk;
             return cid;
         }
@@ -136,10 +136,10 @@ namespace DTerrain
             
             int height = r.Length;
             //We don't use a method for getting chunk id because we need some variables
-            int xchunk = (x + chunkSizeX / 2) / chunkSizeX;
-            int ychunk = (y + chunkSizeY / 2) / chunkSizeY;
-            int posInChunkX = x - xchunk * chunkSizeX + chunkSizeX / 2;
-            int posInChunkY = y - ychunk * chunkSizeY + chunkSizeY / 2;
+            int xchunk = x / chunkSizeX;
+            int ychunk = y / chunkSizeY;
+            int posInChunkX = x - xchunk * chunkSizeX;
+            int posInChunkY = y - ychunk * chunkSizeY;
             int cid = xchunk * ChunkCountY + ychunk;
 
             int k = 0;

@@ -41,7 +41,7 @@ namespace DTerrain
             foreach (Rect r in rects)
             {
                 //Newly created collider will have an offset equeal to that.
-                Vector2 rColliderOffset = new Vector2(-textureSize.x / PPU / 2f + r.x + r.size.x / 2, -textureSize.y / PPU / 2f + r.y + r.size.y / 2f);
+                Vector2 rColliderOffset = new Vector2(r.x + r.size.x / 2, r.y + r.size.y / 2f);
 
                 //Find already existing BoxCollider2D that would fit newly created BoxCollider2D.
                 BoxCollider2D boxC = colls.Find(coll => coll.offset == rColliderOffset && coll.size == r.size);

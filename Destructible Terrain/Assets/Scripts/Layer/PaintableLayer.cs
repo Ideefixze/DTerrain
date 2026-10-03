@@ -92,6 +92,27 @@ namespace DTerrain
                 t.SortingLayerID = SortingLayerID;
                 t.Init();
             }
+            LinkNeighbors();
+        }
+
+        /// <summary>
+        /// Tells each collidable chunk which chunks lie next to it (chunk i, j is Chunks[i * ChunkCountY + j]),
+        /// for colliders that follow the ground across chunk borders and for rebuilding a neighbor.
+        /// </summary>
+        protected virtual void LinkNeighbors()
+        {
+            for (int i = 0; i < ChunkCountX; i++)
+            {
+                for (int j = 0; j < ChunkCountY; j++)
+                {
+                    CollidableChunk c = (PaintableChunk)Chunks[i * ChunkCountY + j] as CollidableChunk;
+                    if (c == null) continue;
+                    c.LeftNeighbor = i > 0 ? (PaintableChunk)Chunks[(i - 1) * ChunkCountY + j] as CollidableChunk : null;
+                    c.RightNeighbor = i < ChunkCountX - 1 ? (PaintableChunk)Chunks[(i + 1) * ChunkCountY + j] as CollidableChunk : null;
+                    c.DownNeighbor = j > 0 ? (PaintableChunk)Chunks[i * ChunkCountY + j - 1] as CollidableChunk : null;
+                    c.UpNeighbor = j < ChunkCountY - 1 ? (PaintableChunk)Chunks[i * ChunkCountY + j + 1] as CollidableChunk : null;
+                }
+            }
         }
 
         public int GetChunkIDByPosition(Vector2Int position)

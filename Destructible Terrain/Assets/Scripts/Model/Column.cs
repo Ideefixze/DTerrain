@@ -38,14 +38,48 @@ namespace DTerrain
 
 
         /// <param name="point">Point of intrest</param>
-        /// <returns>Range that contains a point or null if none has it</returns>
-        public Range Within(int point)
+        /// <returns>Index of the first range that contains a point or -1 if none has it</returns>
+        public int IndexWithin(int point)
         {
-            foreach (Range r in Ranges)
+            for (int i = 0; i < Ranges.Count; i++)
             {
-                if (r.isWithin(point) == true) return r;
+                if (Ranges[i].isWithin(point) == true) return i;
             }
-            return null;
+            return -1;
+        }
+
+        /// <summary>
+        /// True if every row in [y0;y1] belongs to some range (ranges that touch each other count together).
+        /// </summary>
+        public bool Covers(int y0, int y1)
+        {
+            int cur = y0;
+            while (cur <= y1)
+            {
+                //Furthest reach of any range that contains cur
+                int next = cur;
+                for (int k = 0; k < Ranges.Count; k++)
+                {
+                    Range r = Ranges[k];
+                    if (r.Min <= cur && r.Max >= cur && r.Max + 1 > next) next = r.Max + 1;
+                }
+                if (next == cur) return false; //cur is air
+                cur = next;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// True if at least one row in [y0;y1] belongs to some range.
+        /// </summary>
+        public bool Touches(int y0, int y1)
+        {
+            for (int k = 0; k < Ranges.Count; k++)
+            {
+                Range r = Ranges[k];
+                if (Mathf.Max(r.Min, y0) <= Mathf.Min(r.Max, y1)) return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -54,9 +88,10 @@ namespace DTerrain
         /// <param name="pos">Position in column</param>
         public void SingleDelRange(int pos)
         {
-            Range r = Within(pos);
-            if (r != null)
+            int found = IndexWithin(pos);
+            if (found >= 0)
             {
+                Range r = Ranges[found];
                 Range r1 = new Range(r.Min, pos - 1);
                 Range r2 = new Range(pos + 1, r.Max);
                 if (r1.Length > 0) AddRange(r1);
@@ -132,9 +167,8 @@ namespace DTerrain
             bool changed = false;
             for(int i = 0; i<Ranges.Count;i++)
             {
-                Range sum = Range.Sum(addr, Ranges[i]);
-                
-                if (sum!=null)
+                Range sum;
+                if (Range.TrySum(addr, Ranges[i], out sum))
                 {
                     if (sum.Equals(Ranges[i]) == false) changed = true;
                     Ranges[i] = sum;

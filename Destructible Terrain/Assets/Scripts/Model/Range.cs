@@ -1,11 +1,15 @@
+using System;
 using UnityEngine;
 
 namespace DTerrain
 {
     ///<summary>
     ///Range represents a single range: [min;max]
+    ///
+    ///A struct: two ints, no heap allocation per range. Equality is by value (Min and Max),
+    ///which is what List.Remove / IndexOf / Contains in Column rely on.
     ///</summary>
-    public class Range
+    public struct Range : IEquatable<Range>
     {
         public int Min;
         public int Max;
@@ -30,23 +34,21 @@ namespace DTerrain
             Max = b;
         }
 
-        public Range(Range r)
+        public bool Equals(Range r)
         {
-            Min = r.Min;
-            Max = r.Max;
+            return (Min == r.Min) && (Max == r.Max);
         }
 
         public override bool Equals(object obj)
         {
-            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
-            {
-                return false;
-            }
-            else
-            {
-                Range r = (Range)obj;
-                return (Min == r.Min) && (Max == r.Max);
-            }
+            if (obj is Range)
+                return Equals((Range)obj);
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Min * 397 ^ Max;
         }
 
         public static Range operator +(Range r, int a)
@@ -59,18 +61,32 @@ namespace DTerrain
             return new Range(r.Min - a, r.Max - a);
         }
 
-        public static Range Sum(Range a, Range b)
+        /// <summary>
+        /// Joins two overlapping ranges. Ranges that do not overlap (adjacent ones included) are not joined.
+        /// </summary>
+        /// <returns>True and the joined range in sum; false (sum is default) if a and b do not overlap.</returns>
+        public static bool TrySum(Range a, Range b, out Range sum)
         {
             if (a.Min <= b.Min && a.Max >= b.Max) // abBA = aA
-                return new Range(a);
+            {
+                sum = a;
+                return true;
+            }
 
             if (a.Min <= b.Min && a.Max >= b.Min) //abXAX
-                return new Range(a.Min, Mathf.Max(b.Max, a.Max));
+            {
+                sum = new Range(a.Min, Mathf.Max(b.Max, a.Max));
+                return true;
+            }
 
             if (b.Min <= a.Min && b.Max >= a.Min) //baXAX
-                return new Range(b.Min, Mathf.Max(a.Max,b.Max));
+            {
+                sum = new Range(b.Min, Mathf.Max(a.Max, b.Max));
+                return true;
+            }
 
-            return null;
+            sum = new Range(0, 0);
+            return false;
         }
 
     }

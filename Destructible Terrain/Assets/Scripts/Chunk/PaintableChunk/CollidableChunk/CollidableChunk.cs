@@ -17,6 +17,17 @@ namespace DTerrain
         protected IChunkCollider chunkCollider;
         protected bool colliderChanged = true;
 
+        /// <summary>The chunk's columns (read only by convention): neighbors read them along the border.</summary>
+        public List<Column> Columns { get { return columns; } }
+
+        /// <summary>The chunks next to this one, set by the layer (null at the edge of the layer).
+        /// A collider that follows the ground across a chunk border reads them, and a change next to a
+        /// border makes the neighbor rebuild.</summary>
+        public CollidableChunk LeftNeighbor;
+        public CollidableChunk RightNeighbor;
+        public CollidableChunk DownNeighbor;
+        public CollidableChunk UpNeighbor;
+
         public override void Init()
         {
             base.Init();
@@ -28,10 +39,14 @@ namespace DTerrain
         {
             bool b = base.Paint(r, pp);
 
+            bool changed = false;
             if(pp.DestructionMode==DestructionMode.DESTROY)
-                DeleteFromColumns(r);
+                changed = DeleteFromColumns(r);
             if (pp.DestructionMode == DestructionMode.BUILD)
-                AddToColumns(r);
+                changed = AddToColumns(r);
+
+            if (changed)
+                MarkNeighborsChanged(r);
 
             return b;
         }
@@ -55,26 +70,47 @@ namespace DTerrain
             return false;
         }
 
-        private void DeleteFromColumns(RectInt rect)
+        /// <summary>
+        /// A change at a border changes the neighbor's boundary there: it rebuilds too.
+        /// </summary>
+        private void MarkNeighborsChanged(RectInt r)
         {
+            int w = TextureSource.Texture.width;
+            int h = TextureSource.Texture.height;
+            if (LeftNeighbor != null && r.x <= 0) LeftNeighbor.colliderChanged = true;
+            if (RightNeighbor != null && r.x + r.width >= w - 1) RightNeighbor.colliderChanged = true;
+            if (DownNeighbor != null && r.y <= 0) DownNeighbor.colliderChanged = true;
+            if (UpNeighbor != null && r.y + r.height >= h - 1) UpNeighbor.colliderChanged = true;
+        }
+
+        private bool DeleteFromColumns(RectInt rect)
+        {
+            bool any = false;
             RectInt common;
             rect.Intersects(new RectInt(0, 0, TextureSource.Texture.width, TextureSource.Texture.height), out common);
 
             for(int i = 0; i<common.width;i++)
             {
-                colliderChanged = columns[common.x + i].DelRange(new Range(common.y-1, common.y+common.height)) || colliderChanged;
+                bool c = columns[common.x + i].DelRange(new Range(common.y-1, common.y+common.height));
+                any = any || c;
+                colliderChanged = c || colliderChanged;
             }
+            return any;
         }
 
-        private void AddToColumns(RectInt rect)
+        private bool AddToColumns(RectInt rect)
         {
+            bool any = false;
             RectInt common;
             rect.Intersects(new RectInt(0, 0, TextureSource.Texture.width, TextureSource.Texture.height), out common);
 
             for (int i = 0; i < common.width; i++)
             {
-                colliderChanged = columns[common.x + i].SumRange(new Range(common.y, common.y + common.height-1)) || colliderChanged;
+                bool c = columns[common.x + i].SumRange(new Range(common.y, common.y + common.height-1));
+                any = any || c;
+                colliderChanged = c || colliderChanged;
             }
+            return any;
         }
 
 

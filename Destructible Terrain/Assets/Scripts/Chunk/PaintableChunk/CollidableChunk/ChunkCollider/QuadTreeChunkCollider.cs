@@ -29,7 +29,10 @@ namespace DTerrain
 
             rects = new List<Rect>();
 
-            QuadTreeToRect(pixelData, 0, 0, textureSize.x, textureSize.y);
+            List<PixelRect> pixelRects = new List<PixelRect>();
+            ColumnQuadTree.Build(ref pixelData, 0, 0, textureSize.x, textureSize.y, ref pixelRects);
+            foreach (PixelRect p in pixelRects)
+                rects.Add(new Rect(p.X / PPU, p.Y / PPU, p.W / PPU, p.H / PPU));
 
             //Assume all colliders would be deleted. We use enabled for that.
             foreach (BoxCollider2D b in colls)
@@ -66,48 +69,6 @@ namespace DTerrain
                 if (b.enabled == false)
                     Destroy(b);
             }
-        }
-
-        /// <summary>
-        /// Generates Rects using QuadTree algorithm.
-        /// </summary>
-        /// <param name="chunk">Chunk data</param>
-        /// <param name="x">Offset x</param>
-        /// <param name="y">Offset y.</param>
-        /// <param name="sizeX">Width of this step</param>
-        /// <param name="sizeY">Height of this step</param>
-        private void QuadTreeToRect(List<Column> chunk, int x, int y, int sizeX, int sizeY)
-        {
-            bool hasAnyAir = false;
-            bool hasAnyGround = false;
-
-            for (int i = x; i < x + sizeX; i++)
-            {
-                for (int j = y; j < y + sizeY; j++)
-                {
-
-                    if (chunk[i].isWithin(j))
-                        hasAnyGround = true;
-                    else
-                        hasAnyAir = true;
-
-
-                    if (hasAnyAir && hasAnyGround)
-                    {
-                        QuadTreeToRect(chunk, x, y, sizeX / 2, sizeY / 2);
-                        QuadTreeToRect(chunk, x + sizeX / 2, y, sizeX / 2, sizeY / 2);
-                        QuadTreeToRect(chunk, x, y + sizeY / 2, sizeX / 2, sizeY / 2);
-                        QuadTreeToRect(chunk, x + sizeX / 2, y + sizeY / 2, sizeX / 2, sizeY / 2);
-                        return;
-                    }
-                }
-
-            }
-
-            if (hasAnyGround && !hasAnyAir)
-                rects.Add(new Rect(x / PPU, y / PPU, sizeX / PPU, sizeY / PPU));
-
-            return;
         }
 
     }
